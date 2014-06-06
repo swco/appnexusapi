@@ -393,7 +393,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testDevicemakeCodeServiceImport()
+    public function testDeviceMakeCodeServiceImport()
     {
         foreach ($this->getData('device-make', 'device-makes') as $data) {
             if (is_array($data['codes'])) {
@@ -408,6 +408,28 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
 
                     $this->assertInternalType('string', $obj->getCode());
                     $this->assertInternalType('int', $obj->getDeviceMakeId());
+                    $this->assertInternalType('int', $obj->getId());
+                    $this->assertInternalType('string', $obj->getNotes());
+                }
+            }
+        }
+    }
+
+    public function testDeviceModelCodeServiceImport()
+    {
+        foreach ($this->getData('device-model', 'device-models') as $data) {
+            if (isset($data['codes']) && is_array($data['codes'])) {
+                foreach ($data['codes'] as $code) {
+                    $obj = new DeviceModel\Code();
+                    $obj->import($code);
+
+                    $this->assertEquals($code['code'], $obj->getCode());
+                    $this->assertEquals($code['device_model_id'], $obj->getDeviceModelId());
+                    $this->assertEquals($code['id'], $obj->getId());
+                    $this->assertEquals($code['notes'], $obj->getNotes());
+
+                    $this->assertInternalType('string', $obj->getCode());
+                    $this->assertInternalType('int', $obj->getDeviceModelId());
                     $this->assertInternalType('int', $obj->getId());
                     $this->assertInternalType('string', $obj->getNotes());
                 }
