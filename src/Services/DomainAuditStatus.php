@@ -95,9 +95,9 @@ class DomainAuditStatus extends AbstractGetService
 
         if ($this->found) {
             $this->id                = $data['id'];
-            $this->reason            = $data['reason'];
-            $this->contendCategoryId = $data['content_category_id'];
-            $this->intendedAudience  = $data['intended_audience'];
+            $this->reason            = $data['reason'] ? : '';
+            $this->contendCategoryId = $data['content_category_id'] ? : 0;
+            $this->intendedAudience  = $data['intended_audience'] ? : '';
             $this->auditStatus       = $data['audit_status'];
             if ($data['audit_datetime']) {
                 $this->auditDatetime = \DateTime::createFromFormat("Y-m-d H:i:s", $data['audit_datetime']);

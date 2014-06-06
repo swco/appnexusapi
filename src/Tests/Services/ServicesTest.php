@@ -10,6 +10,7 @@ use SWCO\AppNexusAPI\Services\Carrier;
 use SWCO\AppNexusAPI\Services\Category;
 use SWCO\AppNexusAPI\Services\DeviceMake;
 use SWCO\AppNexusAPI\Services\DeviceModel;
+use SWCO\AppNexusAPI\Services\DomainAuditStatus;
 
 class ServicesTest extends \PHPUnit_Framework_TestCase
 {
@@ -149,6 +150,32 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInternalType('string', $obj->getDeviceType());
             $this->assertInternalType('int', $obj->getScreenHeight());
             $this->assertInternalType('int', $obj->getScreenWidth());
+        }
+    }
+
+    public function testDomainAuditStatusServiceImport()
+    {
+        foreach ($this->getData('domain-audit-status', 'urls') as $data) {
+            $obj = new DomainAuditStatus();
+            $obj->import($data);
+
+            $this->assertEquals($data['id'], $obj->getId());
+            $this->assertEquals(new \DateTime($data['audit_datetime']), $obj->getAuditDatetime());
+            $this->assertEquals($data['audit_status'], $obj->getAuditStatus());
+            $this->assertEquals($data['content_category_id'], $obj->getContendCategoryId());
+            $this->assertEquals($data['found'], $obj->isFound());
+            $this->assertEquals($data['intended_audience'], $obj->getIntendedAudience());
+            $this->assertEquals($data['reason'], $obj->getReason());
+            $this->assertEquals($data['url'], $obj->getUrl());
+
+            $this->assertInternalType('int', $obj->getId());
+            $this->assertInstanceOf('\DateTime', $obj->getAuditDatetime());
+            $this->assertInternalType('string', $obj->getAuditStatus());
+            $this->assertInternalType('int', $obj->getContendCategoryId());
+            $this->assertInternalType('bool', $obj->isFound());
+            $this->assertInternalType('string', $obj->getIntendedAudience());
+            $this->assertInternalType('string', $obj->getReason());
+            $this->assertInternalType('string', $obj->getUrl());
         }
     }
 }
