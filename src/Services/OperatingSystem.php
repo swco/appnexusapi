@@ -14,28 +14,28 @@ class OperatingSystem extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the operating system.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * The type of platform on which the operating system runs. Possible values: "web", "mobile", or "both".
      *
      * @var string
      */
-    protected $platformType;
+    protected $platformType = '';
 
     /**
      * Not yet supported.
      *
      * @var int
      */
-    protected $OSFamilyId;
+    protected $OSFamilyId = 0;
 
     /**
      * Date and time the operating system entry was last modified
@@ -49,7 +49,7 @@ class OperatingSystem extends AbstractGetService
      *
      * @var string
      */
-    protected $OSFamilyName;
+    protected $OSFamilyName = '';
 
     /**
      * @param array $data
@@ -65,5 +65,29 @@ class OperatingSystem extends AbstractGetService
         $this->lastModified = \DateTime::createFromFormat("Y-m-d H:i:s", $data['last_modified']);
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastModified()
+    {
+        return $this->lastModified;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlatformType()
+    {
+        return $this->platformType;
     }
 }

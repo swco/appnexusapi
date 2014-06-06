@@ -15,14 +15,14 @@ class Carrier extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the mobile carrier.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * The ISO code for the country in which the carrier operates.
@@ -30,7 +30,7 @@ class Carrier extends AbstractGetService
      * @link http://dev.maxmind.com/geoip/legacy/codes/iso3166/
      * @var string
      */
-    protected $countryCode;
+    protected $countryCode = '';
 
     /**
      * Not yet available.
@@ -39,17 +39,17 @@ class Carrier extends AbstractGetService
      *
      * @var string
      */
-    protected $countryName;
+    protected $countryName = '';
 
     /**
      * Third-party representations for the mobile carrier. See Codes below for more details.
      *
      * @var Carrier\Code[]
      */
-    protected $codes;
+    protected $codes = array();
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function supportsSince()
     {
@@ -75,5 +75,37 @@ class Carrier extends AbstractGetService
         }
 
         return $this;
+    }
+
+    /**
+     * @return Carrier\Code[]
+     */
+    public function getCodes()
+    {
+        return $this->codes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountryCode()
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountryName()
+    {
+        return $this->countryName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

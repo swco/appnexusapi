@@ -17,14 +17,14 @@ class PlatformMember extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the member.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * The type of member, which indicates the primary type of transactions this member performs with AppNexus. Possible
@@ -32,7 +32,7 @@ class PlatformMember extends AbstractGetService
      *
      * @var string
      */
-    protected $primaryType;
+    protected $primaryType = '';
 
     /**
      * The visibility of the member on the platform. Possible values:
@@ -42,14 +42,14 @@ class PlatformMember extends AbstractGetService
      *
      * @var string
      */
-    protected $platformExposure;
+    protected $platformExposure = '';
 
     /**
      * The email address to use to contact the member.
      *
      * @var string
      */
-    protected $email;
+    protected $email = '';
 
     /**
      * The number of daily impressions through inventory that has any audit status, to include: unaudited,
@@ -57,14 +57,14 @@ class PlatformMember extends AbstractGetService
      *
      * @var int
      */
-    protected $dailyImpressionsAnyAuditStatus;
+    protected $dailyImpressionsAnyAuditStatus = 0;
 
     /**
      * The number of daily impressions through inventory that has been audited by AppNexus.
      *
      * @var int
      */
-    protected $dailyImpressionsAppNexusReviewed;
+    protected $dailyImpressionsAppNexusReviewed = 0;
 
     /**
      * The number of daily impressions through inventory that has one of these three audit statuses: seller-reviewed,
@@ -72,22 +72,22 @@ class PlatformMember extends AbstractGetService
      *
      * @var int
      */
-    protected $dailyImpressionsAppNexusSellerReviewed;
+    protected $dailyImpressionsAppNexusSellerReviewed = 0;
 
     /**
      * If true, the member is IASH compliant.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $IASHCompliant;
+    protected $IASHCompliant = false;
 
     /**
      * If true, the member has exposed inventory for resale to other members. You can use the Inventory Resold Service
      * to view information about the exposed inventory.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $resold;
+    protected $resold = 0;
 
     /**
      * The level of detail included in the member's bid requests, if primary_type is "seller".
@@ -111,7 +111,7 @@ class PlatformMember extends AbstractGetService
      *
      * @var string
      */
-    protected $sellerType;
+    protected $sellerType = '';
 
     /**
      * The contact and additional info for the member.
@@ -123,9 +123,9 @@ class PlatformMember extends AbstractGetService
     /**
      * If true, the member is active.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $active;
+    protected $active = false;
 
     /**
      * The date and time when the member entry was last modified.
@@ -140,7 +140,7 @@ class PlatformMember extends AbstractGetService
      *
      * @var float
      */
-    protected $defaultDiscrepancyPCT;
+    protected $defaultDiscrepancyPCT = 0.0;
 
     /**
      * @param array $data
@@ -176,5 +176,133 @@ class PlatformMember extends AbstractGetService
         }
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIASHCompliant()
+    {
+        return $this->IASHCompliant;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @return PlatformMember\Bidder|null
+     */
+    public function getBidder()
+    {
+        return $this->bidder;
+    }
+
+    /**
+     * @return PlatformMember\ContactInfo|null
+     */
+    public function getContactInfo()
+    {
+        return $this->contactInfo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDailyImpressionsAnyAuditStatus()
+    {
+        return $this->dailyImpressionsAnyAuditStatus;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDailyImpressionsAppNexusReviewed()
+    {
+        return $this->dailyImpressionsAppNexusReviewed;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDailyImpressionsAppNexusSellerReviewed()
+    {
+        return $this->dailyImpressionsAppNexusSellerReviewed;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDefaultDiscrepancyPCT()
+    {
+        return $this->defaultDiscrepancyPCT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastModified()
+    {
+        return $this->lastModified;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlatformExposure()
+    {
+        return $this->platformExposure;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrimaryType()
+    {
+        return $this->primaryType;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getResold()
+    {
+        return $this->resold;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSellerType()
+    {
+        return $this->sellerType;
+    }
+
+    /**
+     * @return PlatformMember\VisibilityRules|null
+     */
+    public function getVisibilityRules()
+    {
+        return $this->visibilityRules;
     }
 }

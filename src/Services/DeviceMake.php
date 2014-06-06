@@ -15,24 +15,24 @@ class DeviceMake extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the device make, i.e., "Apple".
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * Third-party representations for the device make.
      *
      * @var DeviceMake\Code[]
      */
-    protected $codes;
+    protected $codes = array();
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function supportsSince()
     {
@@ -54,5 +54,21 @@ class DeviceMake extends AbstractGetService
         }
 
         return $this;
+    }
+
+    /**
+     * @return DeviceMake\Code[]
+     */
+    public function getCodes()
+    {
+        return $this->codes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

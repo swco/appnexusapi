@@ -14,21 +14,21 @@ class Language extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the language.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * The code for the language.
      *
      * @var string
      */
-    protected $code;
+    protected $code = '';
 
     /**
      * The date and time of the last update to the language entry.
@@ -38,7 +38,7 @@ class Language extends AbstractGetService
     protected $lastActivity;
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function supportsSince()
     {
@@ -57,5 +57,37 @@ class Language extends AbstractGetService
         $this->lastActivity = \DateTime::createFromFormat("Y-m-d H:i:s", $data['last_activity']);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastActivity()
+    {
+        return $this->lastActivity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

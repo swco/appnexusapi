@@ -14,21 +14,21 @@ class DomainAuditStatus extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The domain.
      *
      * @var string
      */
-    protected $url;
+    protected $url = '';
 
     /**
      * If audit_status is "rejected" or "unauditable", the reason provided by AppNexus.
      *
      * @var string
      */
-    protected $reason;
+    protected $reason = '';
 
     /**
      * The content category of the domain, as determined by AppNexus. If audit_status is "rejected", this will be null.
@@ -36,7 +36,7 @@ class DomainAuditStatus extends AbstractGetService
      *
      * @var int
      */
-    protected $contendCategoryId;
+    protected $contendCategoryId = 0;
 
     /**
      * The intended audience of the domain, as determined by AppNexus. Possible values: "mature", "young_adult",
@@ -44,7 +44,7 @@ class DomainAuditStatus extends AbstractGetService
      *
      * @var string
      */
-    protected $intendedAudience;
+    protected $intendedAudience = '';
 
     /**
      * The audit status of the domain. Possible values: "unaudited", "pending", "audited", "rejected", "unauditable",
@@ -52,7 +52,7 @@ class DomainAuditStatus extends AbstractGetService
      *
      * @var string
      */
-    protected $auditStatus;
+    protected $auditStatus = '';
 
     /**
      * The date and time when the domain was audited by AppNexus.
@@ -64,12 +64,12 @@ class DomainAuditStatus extends AbstractGetService
     /**
      * If true, the domain is on the AppNexus platform.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $found;
+    protected $found = false;
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function supportsSince()
     {
@@ -77,7 +77,7 @@ class DomainAuditStatus extends AbstractGetService
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function needsPost()
     {
@@ -105,5 +105,61 @@ class DomainAuditStatus extends AbstractGetService
         }
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getAuditDatetime()
+    {
+        return $this->auditDatetime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuditStatus()
+    {
+        return $this->auditStatus;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContendCategoryId()
+    {
+        return $this->contendCategoryId;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getFound()
+    {
+        return $this->found;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntendedAudience()
+    {
+        return $this->intendedAudience;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReason()
+    {
+        return $this->reason;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 }

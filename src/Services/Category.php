@@ -17,43 +17,43 @@ class Category extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the category.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * If true, the category is listed as "sensitive", and is often banned by publishers.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $sensitive;
+    protected $sensitive = false;
 
     /**
      * Whether brands or creatives in this category require whitelisting in order to serve.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $requiresWhitelist;
+    protected $requiresWhitelist = false;
 
     /**
      * Whether brands or creatives in this category require whitelisting in order to serve on managed inventory.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $requiresWhitelistOnManaged;
+    protected $requiresWhitelistOnManaged = false;
 
     /**
      * Whether brands or creatives in this category require whitelisting in order to serve on external (i.e., RTB)
      * inventory.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $requiresWhitelistOnExternal;
+    protected $requiresWhitelistOnExternal = false;
 
     /**
      * The date and time when the category was last modified.
@@ -65,30 +65,30 @@ class Category extends AbstractGetService
     /**
      * If true, the AppNexus audit team may associate the category with brands.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $brandEligible;
+    protected $brandEligible = false;
 
     /**
      * The countries where this category is whitelisted.
      *
      * @var Category\Country[]
      */
-    protected $countries;
+    protected $countries = array();
 
     /**
      * This array contains brand whitelist settings grouped by country.
      *
      * @var Category\CountryBrand[]
      */
-    protected $countriesBrands;
+    protected $countriesBrands = array();
 
     /**
      * This array contains brand whitelist settings grouped by region.
      *
      * @var Category\RegionBrand[]
      */
-    protected $regionsBrands;
+    protected $regionsBrands = array();
 
     /**
      * @param array $data
@@ -121,5 +121,85 @@ class Category extends AbstractGetService
         }
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBrandEligible()
+    {
+        return $this->brandEligible;
+    }
+
+    /**
+     * @return Category\Country[]
+     */
+    public function getCountries()
+    {
+        return $this->countries;
+    }
+
+    /**
+     * @return Category\CountryBrand[]
+     */
+    public function getCountriesBrands()
+    {
+        return $this->countriesBrands;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastModified()
+    {
+        return $this->lastModified;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Category\RegionBrand[]
+     */
+    public function getRegionsBrands()
+    {
+        return $this->regionsBrands;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRequiresWhitelist()
+    {
+        return $this->requiresWhitelist;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRequiresWhitelistOnExternal()
+    {
+        return $this->requiresWhitelistOnExternal;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRequiresWhitelistOnManaged()
+    {
+        return $this->requiresWhitelistOnManaged;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getSensitive()
+    {
+        return $this->sensitive;
     }
 }

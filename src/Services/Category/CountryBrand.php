@@ -14,14 +14,14 @@ class CountryBrand extends AbstractService
      *
      * @var int
      */
-    protected $brandId;
+    protected $brandId = 0;
 
     /**
      * The name of the brand.
      *
      * @var string
      */
-    protected $brandName;
+    protected $brandName = '';
 
     /**
      * An object containing information about the brand whitelisted in this country.
@@ -36,7 +36,7 @@ class CountryBrand extends AbstractService
      *
      * @var string
      */
-    protected $country;
+    protected $country = '';
 
     public function import(array $data)
     {
@@ -47,5 +47,37 @@ class CountryBrand extends AbstractService
         $this->country = $data['country'];
 
         return $this;
+    }
+
+    /**
+     * @return Brand|null
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBrandId()
+    {
+        return $this->brandId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandName()
+    {
+        return $this->brandName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

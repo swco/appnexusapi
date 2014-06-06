@@ -14,14 +14,14 @@ class Brand extends AbstractService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the brand.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     public function import(array $data)
     {
@@ -29,5 +29,21 @@ class Brand extends AbstractService
         $this->name = $data['name'];
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

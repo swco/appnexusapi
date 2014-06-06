@@ -14,28 +14,28 @@ class Code extends AbstractService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The third-party representation for the device make.
      *
      * @var string
      */
-    protected $code;
+    protected $code = '';
 
     /**
      * Identification information about the third-party.
      *
      * @var string
      */
-    protected $notes;
+    protected $notes = '';
 
     /**
      * The ID for the device make.
      *
      * @var int
      */
-    protected $deviceMakeId;
+    protected $deviceMakeId = 0;
 
     /**
      * @param array $data
@@ -49,5 +49,37 @@ class Code extends AbstractService
         $this->deviceMakeId = $data['device_make_id'];
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeviceMakeId()
+    {
+        return $this->deviceMakeId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }

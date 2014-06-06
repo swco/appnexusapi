@@ -14,14 +14,14 @@ class Bidder extends AbstractService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the bidder.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * @param array $data
@@ -33,5 +33,21 @@ class Bidder extends AbstractService
         $this->name = $data['name'];
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

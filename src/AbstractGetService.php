@@ -10,7 +10,7 @@ abstract class AbstractGetService extends AbstractService
     protected $id;
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function supportsSince()
     {
@@ -18,7 +18,7 @@ abstract class AbstractGetService extends AbstractService
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function needsPost()
     {

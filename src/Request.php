@@ -95,8 +95,8 @@ class Request
     }
 
     /**
-     * @param string $service
-     * @param bool   $reset
+     * @param string  $service
+     * @param boolean $reset
      * @return $this
      * @throws Exceptions\BadServiceException
      */

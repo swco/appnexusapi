@@ -15,14 +15,14 @@ class DeviceModel extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the device model, i.e., "IPhone".
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * The ID of the device make to which the model belongs. For example, the "IPhone" device model would belong to the
@@ -30,28 +30,28 @@ class DeviceModel extends AbstractGetService
      *
      * @var int
      */
-    protected $deviceMakeId;
+    protected $deviceMakeId = 0;
 
     /**
      * The type of device. Possible values: "pc", "phone", or "tablet".
      *
      * @var string
      */
-    protected $deviceType;
+    protected $deviceType = '';
 
     /**
      * The width of the screen on the device.
      *
      * @var int
      */
-    protected $screenWidth;
+    protected $screenWidth = 0;
 
     /**
      * The height of the screen on the device.
      *
      * @var int
      */
-    protected $screenHeight;
+    protected $screenHeight = 0;
 
     /**
      * Not yet available.
@@ -59,18 +59,18 @@ class DeviceModel extends AbstractGetService
      * If true, the device supports JavaScript creatives. If null, AppNexus does not know whether or not the device
      * supports JavaScript.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $supportsJS;
+    protected $supportsJS = false;
 
     /**
      * Not yet available.
      *
      * If true, the device supports cookies. If null, AppNexus does not know whether or not the device supports cookies.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $supportsCookies;
+    protected $supportsCookies = false;
 
     /**
      * Not yet available.
@@ -78,18 +78,18 @@ class DeviceModel extends AbstractGetService
      * If true, the device supports Flash creatives. If null, AppNexus does not know whether or not the device supports
      * Flash.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $supportsFlash;
+    protected $supportsFlash = false;
 
     /**
      * Not yet available.
      *
      * If true, the device can pass the latitude and longitude of users, when GPS data is available.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $supportsGEO;
+    protected $supportsGEO = false;
 
     /**
      * Not yet available.
@@ -97,9 +97,9 @@ class DeviceModel extends AbstractGetService
      * If true, the device supports HTML video creatives. If null, AppNexus does not know whether or not the device
      * supports HTML video.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $supportsHTMLVideo;
+    protected $supportsHTMLVideo = false;
 
     /**
      * Not yet available.
@@ -107,9 +107,9 @@ class DeviceModel extends AbstractGetService
      * If true, the device supports HTML audio creatives. If null, AppNexus does not know whether or not the device
      * supports HTML audio.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $supportsHTMLAudio;
+    protected $supportsHTMLAudio = false;
 
     /**
      * Not yet available.
@@ -118,17 +118,17 @@ class DeviceModel extends AbstractGetService
      *
      * @var string
      */
-    protected $deviceMakeName;
+    protected $deviceMakeName = '';
 
     /**
      * Third-party representations for the device model.
      *
      * @var DeviceModel\Code[]
      */
-    protected $codes;
+    protected $codes = array();
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function supportsSince()
     {
@@ -161,5 +161,53 @@ class DeviceModel extends AbstractGetService
         }
 
         return $this;
+    }
+
+    /**
+     * @return DeviceModel\Code[]
+     */
+    public function getCodes()
+    {
+        return $this->codes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeviceMakeId()
+    {
+        return $this->deviceMakeId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScreenHeight()
+    {
+        return $this->screenHeight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScreenWidth()
+    {
+        return $this->screenWidth;
     }
 }

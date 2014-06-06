@@ -14,12 +14,20 @@ class Country extends AbstractService
      *
      * @var string
      */
-    protected $country;
+    protected $country = '';
 
     public function import(array $data)
     {
         $this->country = $data['country'];
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

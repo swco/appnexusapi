@@ -14,28 +14,28 @@ class Code extends AbstractService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The third-party representation for carrier.
      *
      * @var string
      */
-    protected $code;
+    protected $code = '';
 
     /**
      * Identification information about the third-party.
      *
      * @var string
      */
-    protected $notes;
+    protected $notes = '';
 
     /**
      * The ID of the carrier.
      *
      * @var int
      */
-    protected $carrierId;
+    protected $carrierId = 0;
 
     /**
      * @param array $data
@@ -49,6 +49,38 @@ class Code extends AbstractService
         $this->carrierId = $data['carrier_id'];
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCarrierId()
+    {
+        return $this->carrierId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }
 

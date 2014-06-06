@@ -12,37 +12,37 @@ class VisibilityRules extends AbstractService
     /**
      * If true, the seller sends publisher IDs in bid requests.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $exposePublishers;
+    protected $exposePublishers = false;
 
     /**
      * If true, the seller sends placement IDs in bid requests.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $exposeTags;
+    protected $exposeTags = false;
 
     /**
      * If true, the seller sends the age of users in bid requests.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $exposeAge;
+    protected $exposeAge = false;
 
     /**
      * If true, the seller sends the gender of users in bid requests.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $exposeGender;
+    protected $exposeGender = false;
 
     /**
      * If true, the seller sends AppNexus-defined universal content categories in bid requests.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $exposeUniversalCategories;
+    protected $exposeUniversalCategories = false;
 
     /**
      * The visibility of custom content categories in the seller's bid requests. Possible values:
@@ -52,14 +52,14 @@ class VisibilityRules extends AbstractService
      *
      * @var string
      */
-    protected $exposeCustomCategories;
+    protected $exposeCustomCategories = '';
 
     /**
      * The custom content categories that the seller passes in bid requests, if expose_custom_categories is "list".
      *
      * @var \stdClass[]
      */
-    protected $customCategories;
+    protected $customCategories = array();
 
     /**
      * The visibility of impression urls in the seller's bid requests. Possible values:
@@ -69,7 +69,7 @@ class VisibilityRules extends AbstractService
      *              the seller has one configured)
      * @var string
      */
-    protected $urlExposure;
+    protected $urlExposure = '';
 
     /**
      * @param array $data
@@ -92,5 +92,69 @@ class VisibilityRules extends AbstractService
         }
 
         return $this;
+    }
+
+    /**
+     * @return \stdClass[]
+     */
+    public function getCustomCategories()
+    {
+        return $this->customCategories;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExposeAge()
+    {
+        return $this->exposeAge;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExposeCustomCategories()
+    {
+        return $this->exposeCustomCategories;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExposeGender()
+    {
+        return $this->exposeGender;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExposePublishers()
+    {
+        return $this->exposePublishers;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExposeTags()
+    {
+        return $this->exposeTags;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExposeUniversalCategories()
+    {
+        return $this->exposeUniversalCategories;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlExposure()
+    {
+        return $this->urlExposure;
     }
 }

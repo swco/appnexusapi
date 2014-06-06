@@ -14,42 +14,42 @@ class Brand extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the brand.
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * URLs associated with the brand. The format is ["brandurl.com", "brandurl.net", ...]
      *
      * @var string[]
      */
-    protected $urls;
+    protected $urls = array();
 
     /**
      * If true, the brand is a premium brand.
      *
-     * @var bool
+     * @var boolean
      */
-    protected $premium;
+    protected $premium = false;
 
     /**
      * The ID of the category associated with the brand.
      *
      * @var int
      */
-    protected $categoryId;
+    protected $categoryId = 0;
 
     /**
      * The ID of the company associated with the brand.
      *
      * @var int
      */
-    protected $companyId;
+    protected $companyId = 0;
 
     /**
      * The number of active creatives assigned to the brand. This includes your own creatives as well as all other
@@ -57,7 +57,7 @@ class Brand extends AbstractGetService
      *
      * @var int
      */
-    protected $numCreatives;
+    protected $numCreatives = 0;
 
     /**
      * The day and time when the brand was last modified.
@@ -82,5 +82,61 @@ class Brand extends AbstractGetService
         $this->lastModified = \DateTime::createFromFormat("Y-m-d H:i:s", $data['last_modified']);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getUrls()
+    {
+        return $this->urls;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCompanyId()
+    {
+        return $this->companyId;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastModified()
+    {
+        return $this->lastModified;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumCreatives()
+    {
+        return $this->numCreatives;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPremium()
+    {
+        return $this->premium;
     }
 }

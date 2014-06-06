@@ -14,14 +14,14 @@ class TechnicalAttribute extends AbstractGetService
      *
      * @var int
      */
-    protected $id;
+    protected $id = 0;
 
     /**
      * The name of the technical attribute
      *
      * @var string
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * The date/time at which the technical attribute was last modified
@@ -41,5 +41,21 @@ class TechnicalAttribute extends AbstractGetService
         $this->lastModified = \DateTime::createFromFormat("Y-m-d H:i:s", $data['last_modified']);
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastModified()
+    {
+        return $this->lastModified;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
