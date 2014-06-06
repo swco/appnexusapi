@@ -290,4 +290,26 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('\DateTime', $obj->getLastModified());
         }
     }
+
+    public function testCarrierCodeServiceImport()
+    {
+        foreach ($this->getData('carrier', 'carriers') as $data) {
+            if (is_array($data['codes'])) {
+                foreach ($data['codes'] as $code) {
+                    $obj = new Carrier\Code();
+                    $obj->import($code);
+
+                    $this->assertEquals($code['id'], $obj->getId());
+                    $this->assertEquals($code['carrier_id'], $obj->getCarrierId());
+                    $this->assertEquals($code['code'], $obj->getCode());
+                    $this->assertEquals($code['notes'], $obj->getNotes());
+
+                    $this->assertInternalType('int', $obj->getId());
+                    $this->assertInternalType('int', $obj->getCarrierId());
+                    $this->assertInternalType('string', $obj->getCode());
+                    $this->assertInternalType('string', $obj->getNotes());
+                }
+            }
+        }
+    }
 }
