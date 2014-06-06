@@ -12,6 +12,7 @@ use SWCO\AppNexusAPI\Services\DeviceMake;
 use SWCO\AppNexusAPI\Services\DeviceModel;
 use SWCO\AppNexusAPI\Services\DomainAuditStatus;
 use SWCO\AppNexusAPI\Services\Language;
+use SWCO\AppNexusAPI\Services\OperatingSystem;
 
 class ServicesTest extends \PHPUnit_Framework_TestCase
 {
@@ -195,6 +196,24 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInternalType('string', $obj->getName());
             $this->assertInternalType('string', $obj->getCode());
             $this->assertInstanceOf('\DateTime', $obj->getLastActivity());
+        }
+    }
+
+    public function testOperatingSystemServiceImport()
+    {
+        foreach ($this->getData('operating-system', 'operating-systems') as $data) {
+            $obj = new OperatingSystem();
+            $obj->import($data);
+
+            $this->assertEquals($data['id'], $obj->getId());
+            $this->assertEquals($data['name'], $obj->getName());
+            $this->assertEquals(new \DateTime($data['last_modified']), $obj->getLastModified());
+            $this->assertEquals($data['platform_type'], $obj->getPlatformType());
+
+            $this->assertInternalType('int', $obj->getId());
+            $this->assertInternalType('string', $obj->getName());
+            $this->assertInstanceOf('\DateTime', $obj->getLastModified());
+            $this->assertInternalType('string', $obj->getPlatformType());
         }
     }
 }
