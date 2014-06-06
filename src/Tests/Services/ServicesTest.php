@@ -392,4 +392,26 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testDevicemakeCodeServiceImport()
+    {
+        foreach ($this->getData('device-make', 'device-makes') as $data) {
+            if (is_array($data['codes'])) {
+                foreach ($data['codes'] as $code) {
+                    $obj = new DeviceMake\Code();
+                    $obj->import($code);
+
+                    $this->assertEquals($code['code'], $obj->getCode());
+                    $this->assertEquals($code['device_make_id'], $obj->getDeviceMakeId());
+                    $this->assertEquals($code['id'], $obj->getId());
+                    $this->assertEquals($code['notes'], $obj->getNotes());
+
+                    $this->assertInternalType('string', $obj->getCode());
+                    $this->assertInternalType('int', $obj->getDeviceMakeId());
+                    $this->assertInternalType('int', $obj->getId());
+                    $this->assertInternalType('string', $obj->getNotes());
+                }
+            }
+        }
+    }
 }
