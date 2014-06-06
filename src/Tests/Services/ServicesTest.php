@@ -312,4 +312,24 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testCategoryBrandServiceImport()
+    {
+        foreach ($this->getData('category', 'categories') as $data) {
+            if (is_array($data['whitelist']['countries_and_brands'])) {
+                foreach ($data['whitelist']['countries_and_brands'] as $countriesAndBrands) {
+                    if ($countriesAndBrands['brand']) {
+                        $obj = new Category\Brand();
+                        $obj->import($countriesAndBrands['brand']);
+
+                        $this->assertEquals($countriesAndBrands['brand']['id'], $obj->getId());
+                        $this->assertEquals($countriesAndBrands['brand']['name'], $obj->getName());
+
+                        $this->assertInternalType('int', $obj->getId());
+                        $this->assertInternalType('string', $obj->getName());
+                    }
+                }
+            }
+        }
+    }
 }
