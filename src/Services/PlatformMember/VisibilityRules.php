@@ -52,7 +52,7 @@ class VisibilityRules extends AbstractService
      *
      * @var string
      */
-    protected $exposeCustomCategories = '';
+    protected $exposedCustomCategories = '';
 
     /**
      * The custom content categories that the seller passes in bid requests, if expose_custom_categories is "list".
@@ -77,13 +77,13 @@ class VisibilityRules extends AbstractService
      */
     public function import(array $data)
     {
-        $this->exposePublishers                                     = $data['expose_publishers'];
-        $this->exposeTags                                   = $data['expose_tags'];
-        $this->exposeAge                            = $data['expose_age'];
-        $this->exposeGender                       = $data['expose_gender'];
-        $this->exposeUniversalCategories         = $data['expose_universal_categories'];
-        $this->exposeCustomCategories       = $data['expose_custom_categories'];
-        $this->urlExposure = $data['url_exposure'];
+        $this->exposePublishers          = $data['expose_publishers'];
+        $this->exposeTags                = $data['expose_tags'];
+        $this->exposeAge                 = $data['expose_age'];
+        $this->exposeGender              = $data['expose_gender'];
+        $this->exposeUniversalCategories = $data['expose_universal_categories'];
+        $this->exposedCustomCategories   = $data['expose_custom_categories'];
+        $this->urlExposure               = $data['url_exposure'];
 
         if (is_array($data['custom_categories'])) {
             foreach ($data['custom_categories'] as $customCategory) {
@@ -113,9 +113,9 @@ class VisibilityRules extends AbstractService
     /**
      * @return string
      */
-    public function getExposeCustomCategories()
+    public function getExposedCustomCategories()
     {
-        return $this->exposeCustomCategories;
+        return $this->exposedCustomCategories;
     }
 
     /**

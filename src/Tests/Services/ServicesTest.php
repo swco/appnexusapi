@@ -489,4 +489,32 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testPlatformMemberVisibilityRulesServiceImport()
+    {
+        foreach ($this->getData('platform-member', 'platform-members') as $data) {
+            if ($data['visibility_rules']) {
+                $vr  = $data['visibility_rules'];
+                $obj = new PlatformMember\VisibilityRules();
+                $obj->import($vr);
+
+                $this->assertEquals($vr['expose_age'], $obj->canExposeAge());
+                $this->assertEquals($vr['expose_custom_categories'], $obj->getExposedCustomCategories());
+                $this->assertEquals($vr['expose_gender'], $obj->canExposeGender());
+                $this->assertEquals($vr['expose_publishers'], $obj->canExposePublishers());
+                $this->assertEquals($vr['expose_tags'], $obj->canExposeTags());
+                $this->assertEquals($vr['expose_universal_categories'], $obj->canExposeUniversalCategories());
+                $this->assertEquals($vr['url_exposure'], $obj->getUrlExposure());
+
+                $this->assertInternalType('array', $obj->getCustomCategories());
+                $this->assertInternalType('bool', $obj->canExposeAge());
+                $this->assertInternalType('string', $obj->getExposedCustomCategories());
+                $this->assertInternalType('bool', $obj->canExposeGender());
+                $this->assertInternalType('bool', $obj->canExposePublishers());
+                $this->assertInternalType('bool', $obj->canExposeTags());
+                $this->assertInternalType('bool', $obj->canExposeUniversalCategories());
+                $this->assertInternalType('string', $obj->getUrlExposure());
+            }
+        }
+    }
 }
