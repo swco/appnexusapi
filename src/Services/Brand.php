@@ -135,7 +135,7 @@ class Brand extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getPremium()
+    public function isPremium()
     {
         return $this->premium;
     }

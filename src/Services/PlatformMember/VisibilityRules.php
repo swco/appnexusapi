@@ -105,7 +105,7 @@ class VisibilityRules extends AbstractService
     /**
      * @return boolean
      */
-    public function getExposeAge()
+    public function canExposeAge()
     {
         return $this->exposeAge;
     }
@@ -121,7 +121,7 @@ class VisibilityRules extends AbstractService
     /**
      * @return boolean
      */
-    public function getExposeGender()
+    public function canExposeGender()
     {
         return $this->exposeGender;
     }
@@ -129,7 +129,7 @@ class VisibilityRules extends AbstractService
     /**
      * @return boolean
      */
-    public function getExposePublishers()
+    public function canExposePublishers()
     {
         return $this->exposePublishers;
     }
@@ -137,7 +137,7 @@ class VisibilityRules extends AbstractService
     /**
      * @return boolean
      */
-    public function getExposeTags()
+    public function canExposeTags()
     {
         return $this->exposeTags;
     }
@@ -145,7 +145,7 @@ class VisibilityRules extends AbstractService
     /**
      * @return boolean
      */
-    public function getExposeUniversalCategories()
+    public function canExposeUniversalCategories()
     {
         return $this->exposeUniversalCategories;
     }

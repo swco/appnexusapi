@@ -134,7 +134,7 @@ class DomainAuditStatus extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getFound()
+    public function isFound()
     {
         return $this->found;
     }

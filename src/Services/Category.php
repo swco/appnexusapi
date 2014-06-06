@@ -126,7 +126,7 @@ class Category extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getBrandEligible()
+    public function isBrandEligible()
     {
         return $this->brandEligible;
     }
@@ -174,7 +174,7 @@ class Category extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getRequiresWhitelist()
+    public function requiresWhitelist()
     {
         return $this->requiresWhitelist;
     }
@@ -182,7 +182,7 @@ class Category extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getRequiresWhitelistOnExternal()
+    public function requiresWhitelistOnExternal()
     {
         return $this->requiresWhitelistOnExternal;
     }
@@ -190,7 +190,7 @@ class Category extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getRequiresWhitelistOnManaged()
+    public function requiresWhitelistOnManaged()
     {
         return $this->requiresWhitelistOnManaged;
     }
@@ -198,7 +198,7 @@ class Category extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getSensitive()
+    public function isSensitive()
     {
         return $this->sensitive;
     }

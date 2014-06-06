@@ -181,7 +181,7 @@ class PlatformMember extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getIASHCompliant()
+    public function isIASHCompliant()
     {
         return $this->IASHCompliant;
     }
@@ -189,7 +189,7 @@ class PlatformMember extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getActive()
+    public function isActive()
     {
         return $this->active;
     }
@@ -285,7 +285,7 @@ class PlatformMember extends AbstractGetService
     /**
      * @return boolean
      */
-    public function getResold()
+    public function isResold()
     {
         return $this->resold;
     }
