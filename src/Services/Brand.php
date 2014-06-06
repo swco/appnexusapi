@@ -78,7 +78,7 @@ class Brand extends AbstractGetService
         $this->premium      = $data['is_premium'];
         $this->categoryId   = $data['category_id'];
         $this->companyId    = $data['company_id'] ? : 0;
-        $this->numCreatives = (int)$data['num_creatives'];
+        $this->numCreatives = $data['num_creatives'] ? (int)$data['num_creatives'] : 0;
         $this->lastModified = \DateTime::createFromFormat("Y-m-d H:i:s", $data['last_modified']);
 
         return $this;
