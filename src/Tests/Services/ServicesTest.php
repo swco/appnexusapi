@@ -332,4 +332,20 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testCategoryCountryServiceImport()
+    {
+        foreach ($this->getData('category', 'categories') as $data) {
+            if (is_array($data['whitelist']['countries'])) {
+                foreach ($data['whitelist']['countries'] as $countries) {
+                    $obj = new Category\Country();
+                    $obj->import($countries);
+
+                    $this->assertEquals($countries['country'], $obj->getCountry());
+
+                    $this->assertInternalType('string', $obj->getCountry());
+                }
+            }
+        }
+    }
 }
