@@ -4,7 +4,7 @@ AppNexus Read-Only API
 ```php
 use \SWCO\AppNexusAPI\Request;
 
-$request = new \SWCO\AppNexusAPI\Request("username", "password");
+$request = new Request("username", "password");
 
 // Get category ID 1 and 7
 $categories = $request->whereId(array(1, 7))->getCategories();
