@@ -152,27 +152,31 @@ class PlatformMember extends AbstractGetService
         $this->name                                   = $data['name'];
         $this->primaryType                            = $data['primary_type'];
         $this->platformExposure                       = $data['platform_exposure'];
-        $this->email                                  = $data['email'];
-        $this->dailyImpressionsAnyAuditStatus         = $data['daily_imps_any_audit_status'];
-        $this->dailyImpressionsAppNexusReviewed       = $data['daily_imps_appnexus_reviewed'];
-        $this->dailyImpressionsAppNexusSellerReviewed = $data['daily_imps_appnexus_seller_reviewed'];
+        $this->email                                  = $data['email'] ? : '';
+        $this->dailyImpressionsAnyAuditStatus         = $data['daily_imps_any_audit_status'] ? : 0;
+        $this->dailyImpressionsAppNexusReviewed       = $data['daily_imps_appnexus_reviewed'] ? : 0;
+        $this->dailyImpressionsAppNexusSellerReviewed = $data['daily_imps_appnexus_seller_reviewed'] ? : 0;
         $this->IASHCompliant                          = $data['is_iash_compliant'];
         $this->resold                                 = $data['has_resold'];
         $visibilityRules                              = new VisibilityRules();
         $this->visibilityRules                        = $visibilityRules->import($data['visibility_rules']);
-        $bidder                                       = new Bidder();
-        $this->bidder                                 = $bidder->import($data['bidder']);
-        $this->sellerType                             = $data['seller_type'];
+        $this->bidder                                 = new Bidder();
+        if ($data['bidder']) {
+            $this->bidder->import($data['bidder']);
+        }
+        $this->sellerType                             = $data['seller_type'] ? : '';
         $this->contactInfo                            = new ContactInfo();
         $this->active                                 = $data['active'];
         $this->lastModified                           = \DateTime::createFromFormat(
             "Y-m-d H:i:s",
             $data['last_modified']
         );
-        $this->defaultDiscrepancyPCT                  = $data['default_discrepancy_pct'];
+        $this->defaultDiscrepancyPCT                  = (float)$data['default_discrepancy_pct'] ? : 0.0;
 
         if ($data['contact_info'] !== null) {
-            $this->contactInfo = $this->contactInfo->import($data['contact_info']);
+            $this->contactInfo = $this->contactInfo->import(
+                isset($data['contact_info'][0]) ? $data['contact_info'][0] : $data['contact_info']
+            );
         }
 
         return $this;
@@ -285,7 +289,7 @@ class PlatformMember extends AbstractGetService
     /**
      * @return boolean
      */
-    public function isResold()
+    public function hasResold()
     {
         return $this->resold;
     }

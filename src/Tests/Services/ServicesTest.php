@@ -13,6 +13,7 @@ use SWCO\AppNexusAPI\Services\DeviceModel;
 use SWCO\AppNexusAPI\Services\DomainAuditStatus;
 use SWCO\AppNexusAPI\Services\Language;
 use SWCO\AppNexusAPI\Services\OperatingSystem;
+use SWCO\AppNexusAPI\Services\PlatformMember;
 
 class ServicesTest extends \PHPUnit_Framework_TestCase
 {
@@ -214,6 +215,62 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInternalType('string', $obj->getName());
             $this->assertInstanceOf('\DateTime', $obj->getLastModified());
             $this->assertInternalType('string', $obj->getPlatformType());
+        }
+    }
+
+    public function testPlatformMemberServiceImport()
+    {
+        foreach ($this->getData('platform-member', 'platform-members') as $data) {
+            $obj = new PlatformMember();
+            $obj->import($data);
+
+            $this->assertEquals($data['id'], $obj->getId());
+            $this->assertEquals($data['name'], $obj->getName());
+            $this->assertEquals(new \DateTime($data['last_modified']), $obj->getLastModified());
+            $this->assertEquals($data['is_iash_compliant'], $obj->isIASHCompliant());
+            $this->assertEquals($data['active'], $obj->isActive());
+            $this->assertEquals(new PlatformMember\Bidder($data['bidder'] ? : array()), $obj->getBidder());
+            if (isset($data['contact_info'][0]) && $data['contact_info'][0]) {
+                $this->assertEquals(new PlatformMember\ContactInfo($data['contact_info'][0]), $obj->getContactInfo());
+            } elseif (isset($data['contact_info']) && $data['contact_info']) {
+                $this->assertEquals(new PlatformMember\ContactInfo($data['contact_info']), $obj->getContactInfo());
+            } else {
+                $this->assertEquals(new PlatformMember\ContactInfo(), $obj->getContactInfo());
+            }
+            $this->assertEquals($data['daily_imps_any_audit_status'], $obj->getDailyImpressionsAnyAuditStatus());
+            $this->assertEquals($data['daily_imps_appnexus_reviewed'], $obj->getDailyImpressionsAppNexusReviewed());
+            $this->assertEquals(
+                $data['daily_imps_appnexus_seller_reviewed'], $obj->getDailyImpressionsAppNexusSellerReviewed()
+            );
+            $this->assertEquals($data['default_discrepancy_pct'], $obj->getDefaultDiscrepancyPCT());
+            $this->assertEquals($data['email'], $obj->getEmail());
+            $this->assertEquals($data['platform_exposure'], $obj->getPlatformExposure());
+            $this->assertEquals($data['primary_type'], $obj->getPrimaryType());
+            $this->assertEquals($data['has_resold'], $obj->hasResold());
+            $this->assertEquals($data['seller_type'], $obj->getSellerType());
+            $this->assertEquals(
+                new PlatformMember\VisibilityRules($data['visibility_rules']), $obj->getVisibilityRules()
+            );
+
+            $this->assertInternalType('int', $obj->getId());
+            $this->assertInternalType('string', $obj->getName());
+            $this->assertInstanceOf('\DateTime', $obj->getLastModified());
+            $this->assertInternalType('bool', $obj->isIASHCompliant());
+            $this->assertInternalType('bool', $obj->isActive());
+            $this->assertInstanceOf('\SWCO\AppNexusAPI\Services\PlatformMember\Bidder', $obj->getBidder());
+            $this->assertInstanceOf('\SWCO\AppNexusAPI\Services\PlatformMember\ContactInfo', $obj->getContactInfo());
+            $this->assertInternalType('int', $obj->getDailyImpressionsAnyAuditStatus());
+            $this->assertInternalType('int', $obj->getDailyImpressionsAppNexusReviewed());
+            $this->assertInternalType('int', $obj->getDailyImpressionsAppNexusSellerReviewed());
+            $this->assertInternalType('float', $obj->getDefaultDiscrepancyPCT());
+            $this->assertInternalType('string', $obj->getEmail());
+            $this->assertInternalType('string', $obj->getPlatformExposure());
+            $this->assertInternalType('string', $obj->getPrimaryType());
+            $this->assertInternalType('bool', $obj->hasResold());
+            $this->assertInternalType('string', $obj->getSellerType());
+            $this->assertInstanceOf(
+                '\SWCO\AppNexusAPI\Services\PlatformMember\VisibilityRules', $obj->getVisibilityRules()
+            );
         }
     }
 }

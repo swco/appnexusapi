@@ -87,7 +87,7 @@ class ContactInfo extends AbstractService
         $this->email          = $data['email'];
         $this->phone          = $data['phone'];
         $this->address        = $data['address'];
-        $this->address2       = $data['address2'];
+        $this->address2       = $data['address_2'];
         $this->city           = $data['city'];
         $this->country        = $data['country'];
         $this->region         = $data['region'];
