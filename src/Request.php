@@ -107,7 +107,7 @@ class Request
         }
 
         if ($reset) {
-            $this->where = array();
+            $this->reset();
         }
 
         $this->service = $service;
