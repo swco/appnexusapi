@@ -65,7 +65,7 @@ class Carrier extends AbstractGetService
         $this->id          = $data['id'];
         $this->name        = $data['name'];
         $this->countryCode = $data['country_code'];
-        $this->countryName = $data['country_name'];
+        $this->countryName = $data['country_name'] ? : '';
 
         if (is_array($data['codes'])) {
             foreach ($data['codes'] as $code) {
