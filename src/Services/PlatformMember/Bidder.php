@@ -29,7 +29,7 @@ class Bidder extends AbstractService
      */
     public function import(array $data)
     {
-        $this->id   = $data['id'];
+        $this->id   = (int)$data['id'];
         $this->name = $data['name'];
 
         return $this;

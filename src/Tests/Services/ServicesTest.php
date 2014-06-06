@@ -436,4 +436,20 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testPlatformMemberBidderServiceImport()
+    {
+        foreach ($this->getData('platform-member', 'platform-members') as $data) {
+            if ($data['bidder']) {
+                $obj = new PlatformMember\Bidder();
+                $obj->import($data['bidder']);
+
+                $this->assertEquals($data['bidder']['id'], $obj->getId());
+                $this->assertEquals($data['bidder']['name'], $obj->getName());
+
+                $this->assertInternalType('int', $obj->getId());
+                $this->assertInternalType('string', $obj->getName());
+            }
+        }
+    }
 }
