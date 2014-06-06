@@ -370,4 +370,26 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testCategoryRegionBrandServiceImport()
+    {
+        foreach ($this->getData('category', 'categories') as $data) {
+            if (is_array($data['whitelist']['regions_and_brands'])) {
+                foreach ($data['whitelist']['regions_and_brands'] as $regionsAndBrands) {
+                    $obj = new Category\RegionBrand();
+                    $obj->import($regionsAndBrands);
+
+                    $this->assertEquals(new Category\Brand($regionsAndBrands['brand']), $obj->getBrand());
+                    $this->assertEquals($regionsAndBrands['brand_id'], $obj->getBrandId());
+                    $this->assertEquals($regionsAndBrands['brand_name'], $obj->getBrandName());
+                    $this->assertEquals($regionsAndBrands['region'], $obj->getRegion());
+
+                    $this->assertInstanceOf('\SWCO\AppNexusAPI\Services\Category\Brand', $obj->getBrand());
+                    $this->assertInternalType('int', $obj->getBrandId());
+                    $this->assertInternalType('string', $obj->getBrandName());
+                    $this->assertInternalType('string', $obj->getRegion());
+                }
+            }
+        }
+    }
 }
