@@ -1,20 +1,21 @@
 {
-    "name": "swco/appnexusapi",
+    "name":        "swco/appnexusapi",
     "description": "Interface for accessing the AppNexus read-only API",
-    "authors": [
+    "authors":     [
         {
-            "name": "Gareth Evans",
+            "name":  "Gareth Evans",
             "email": "garoevans@gmail.com",
-            "role": "Developer"
+            "role":  "Developer"
         }
     ],
-    "license": "MIT",
-    "autoload": {
+    "license":     "MIT",
+    "autoload":    {
         "psr-4": {
             "SWCO\\AppNexusAPI\\": "src"
         }
     },
-    "require": {
-        "guzzle/guzzle": "v3.8.1"
+    "require":     {
+        "guzzle/guzzle": "v3.8.1",
+        "php":           ">=5.3"
     }
 }

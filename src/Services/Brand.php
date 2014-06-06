@@ -74,7 +74,7 @@ class Brand extends AbstractGetService
     {
         $this->id           = $data['id'];
         $this->name         = $data['name'];
-        $this->urls         = $data['urls'];
+        $this->urls         = is_array($data['urls']) ? $data['urls'] : array();
         $this->premium      = $data['is_premium'];
         $this->categoryId   = $data['category_id'];
         $this->companyId    = $data['company_id'];
