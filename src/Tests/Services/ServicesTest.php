@@ -14,6 +14,7 @@ use SWCO\AppNexusAPI\Services\DomainAuditStatus;
 use SWCO\AppNexusAPI\Services\Language;
 use SWCO\AppNexusAPI\Services\OperatingSystem;
 use SWCO\AppNexusAPI\Services\PlatformMember;
+use SWCO\AppNexusAPI\Services\TechnicalAttribute;
 
 class ServicesTest extends \PHPUnit_Framework_TestCase
 {
@@ -271,6 +272,22 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf(
                 '\SWCO\AppNexusAPI\Services\PlatformMember\VisibilityRules', $obj->getVisibilityRules()
             );
+        }
+    }
+
+    public function testTechnicalAttributeServiceImport()
+    {
+        foreach ($this->getData('technical-attribute', 'technical-attributes') as $data) {
+            $obj = new TechnicalAttribute();
+            $obj->import($data);
+
+            $this->assertEquals($data['id'], $obj->getId());
+            $this->assertEquals($data['name'], $obj->getName());
+            $this->assertEquals(new \DateTime($data['last_modified']), $obj->getLastModified());
+
+            $this->assertInternalType('int', $obj->getId());
+            $this->assertInternalType('string', $obj->getName());
+            $this->assertInstanceOf('\DateTime', $obj->getLastModified());
         }
     }
 }
