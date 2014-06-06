@@ -452,4 +452,41 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testPlatformMemberContactInfoServiceImport()
+    {
+        foreach ($this->getData('platform-member', 'platform-members') as $data) {
+            if ($data['contact_info']) {
+                $contactInfo = isset($data['contact_info'][0]) ? $data['contact_info'][0] : $data['contact_info'];
+                $obj = new PlatformMember\ContactInfo();
+                $obj->import($contactInfo ? : array());
+
+                $this->assertEquals($contactInfo['name'], $obj->getName());
+                $this->assertEquals($contactInfo['additional_info'], $obj->getAdditionalInfo());
+                $this->assertEquals($contactInfo['address'], $obj->getAddress());
+                $this->assertEquals($contactInfo['city'], $obj->getCity());
+                $this->assertEquals($contactInfo['country'], $obj->getCountry());
+                $this->assertEquals($contactInfo['email'], $obj->getEmail());
+                $this->assertEquals($contactInfo['phone'], $obj->getPhone());
+                $this->assertEquals($contactInfo['postal_code'], $obj->getPostalCode());
+                $this->assertEquals($contactInfo['region'], $obj->getRegion());
+                $this->assertEquals($contactInfo['title'], $obj->getTitle());
+                $this->assertEquals($contactInfo['types'], $obj->getTypes());
+                $this->assertEquals($contactInfo['website_url'], $obj->getWebsiteURL());
+
+                $this->assertInternalType('string', $obj->getName());
+                $this->assertInternalType('string', $obj->getAdditionalInfo());
+                $this->assertInternalType('string', $obj->getAddress());
+                $this->assertInternalType('string', $obj->getCity());
+                $this->assertInternalType('string', $obj->getCountry());
+                $this->assertInternalType('string', $obj->getEmail());
+                $this->assertInternalType('string', $obj->getPhone());
+                $this->assertInternalType('string', $obj->getPostalCode());
+                $this->assertInternalType('string', $obj->getRegion());
+                $this->assertInternalType('string', $obj->getTitle());
+                $this->assertInternalType('array', $obj->getTypes());
+                $this->assertInternalType('string', $obj->getWebsiteURL());
+            }
+        }
+    }
 }

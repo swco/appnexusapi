@@ -92,8 +92,8 @@ class ContactInfo extends AbstractService
         $this->country        = $data['country'];
         $this->region         = $data['region'];
         $this->postalCode     = $data['postal_code'];
-        $this->additionalInfo = $data['additional_info'];
-        $this->websiteURL     = $data['website_url'];
+        $this->additionalInfo = $data['additional_info'] ? : '';
+        $this->websiteURL     = $data['website_url'] ? : '';
         $this->types          = $data['types'];
 
         return $this;
