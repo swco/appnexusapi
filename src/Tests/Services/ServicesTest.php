@@ -8,6 +8,7 @@ namespace SWCO\AppNexusAPI\Tests\Services;
 use SWCO\AppNexusAPI\Services\Brand;
 use SWCO\AppNexusAPI\Services\Carrier;
 use SWCO\AppNexusAPI\Services\Category;
+use SWCO\AppNexusAPI\Services\DeviceMake;
 
 class ServicesTest extends \PHPUnit_Framework_TestCase
 {
@@ -105,6 +106,22 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInternalType('bool', $obj->requiresWhitelistOnExternal());
             $this->assertInternalType('bool', $obj->requiresWhitelistOnManaged());
             $this->assertInternalType('bool', $obj->isSensitive());
+        }
+    }
+
+    public function testDeviceMakeServiceImport()
+    {
+        foreach ($this->getData('device-make', 'device-makes') as $data) {
+            $obj = new DeviceMake();
+            $obj->import($data);
+
+            $this->assertEquals($data['id'], $obj->getId());
+            $this->assertEquals($data['name'], $obj->getName());
+            $this->assertCount(count($this->getArray($data['codes'])), $obj->getCodes());
+
+            $this->assertInternalType('int', $obj->getId());
+            $this->assertInternalType('string', $obj->getName());
+            $this->assertInternalType('array', $obj->getCodes());
         }
     }
 }

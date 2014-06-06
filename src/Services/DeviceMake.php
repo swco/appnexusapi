@@ -45,12 +45,14 @@ class DeviceMake extends AbstractGetService
      */
     public function import(array $data)
     {
-        $this->id                          = $data['id'];
-        $this->name                        = $data['name'];
+        $this->id   = $data['id'];
+        $this->name = $data['name'];
 
-        foreach ($data['codes'] as $code) {
-            $codeObj       = new Code();
-            $this->codes[] = $codeObj->import($code);
+        if ($data['codes']) {
+            foreach ($data['codes'] as $code) {
+                $codeObj       = new Code();
+                $this->codes[] = $codeObj->import($code);
+            }
         }
 
         return $this;
