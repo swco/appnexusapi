@@ -53,7 +53,7 @@ class Language extends AbstractGetService
     {
         $this->id           = $data['id'];
         $this->name         = $data['name'];
-        $this->code         = $data['code'];
+        $this->code         = $data['code'] ? : '';
         $this->lastActivity = \DateTime::createFromFormat("Y-m-d H:i:s", $data['last_activity']);
 
         return $this;
@@ -65,14 +65,6 @@ class Language extends AbstractGetService
     public function getCode()
     {
         return $this->code;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

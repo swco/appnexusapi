@@ -11,6 +11,7 @@ use SWCO\AppNexusAPI\Services\Category;
 use SWCO\AppNexusAPI\Services\DeviceMake;
 use SWCO\AppNexusAPI\Services\DeviceModel;
 use SWCO\AppNexusAPI\Services\DomainAuditStatus;
+use SWCO\AppNexusAPI\Services\Language;
 
 class ServicesTest extends \PHPUnit_Framework_TestCase
 {
@@ -176,6 +177,24 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInternalType('string', $obj->getIntendedAudience());
             $this->assertInternalType('string', $obj->getReason());
             $this->assertInternalType('string', $obj->getUrl());
+        }
+    }
+
+    public function testLanguageServiceImport()
+    {
+        foreach ($this->getData('language', 'languages') as $data) {
+            $obj = new Language();
+            $obj->import($data);
+
+            $this->assertEquals($data['id'], $obj->getId());
+            $this->assertEquals($data['name'], $obj->getName());
+            $this->assertEquals(new \DateTime($data['last_activity']), $obj->getLastActivity());
+            $this->assertEquals($data['code'], $obj->getCode());
+
+            $this->assertInternalType('int', $obj->getId());
+            $this->assertInternalType('string', $obj->getName());
+            $this->assertInternalType('string', $obj->getCode());
+            $this->assertInstanceOf('\DateTime', $obj->getLastActivity());
         }
     }
 }
