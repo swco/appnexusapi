@@ -1,0 +1,13 @@
+{
+    "name": "swco/appnexusapi",
+    "description": "AppNexus Read-Only API",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SWCO\\AppNexusAPI\\": "src"
+        }
+    },
+    "require": {
+        "guzzle/guzzle": "v3.8.1"
+    }
+}
