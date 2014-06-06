@@ -145,8 +145,8 @@ class DeviceModel extends AbstractGetService
         $this->name              = $data['name'];
         $this->deviceMakeId      = $data['device_make_id'];
         $this->deviceType        = $data['device_type'];
-        $this->screenWidth       = $data['screen_width'];
-        $this->screenHeight      = $data['screen_height'];
+        $this->screenWidth       = $data['screen_width'] ? : 0;
+        $this->screenHeight      = $data['screen_height'] ? : 0;
         $this->supportsJS        = $data['supports_js'];
         $this->supportsCookies   = $data['supports_cookies'];
         $this->supportsFlash     = $data['supports_flash'];
@@ -155,9 +155,11 @@ class DeviceModel extends AbstractGetService
         $this->supportsHTMLAudio = $data['supports_html_audio'];
         $this->deviceMakeName    = $data['device_make_name'];
 
-        foreach ($data['codes'] as $code) {
-            $codeObj       = new Code();
-            $this->codes[] = $codeObj->import($code);
+        if (isset($data['codes']) && $data['codes']) {
+            foreach ($data['codes'] as $code) {
+                $codeObj       = new Code();
+                $this->codes[] = $codeObj->import($code);
+            }
         }
 
         return $this;

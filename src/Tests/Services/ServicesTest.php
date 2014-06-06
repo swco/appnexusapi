@@ -9,6 +9,7 @@ use SWCO\AppNexusAPI\Services\Brand;
 use SWCO\AppNexusAPI\Services\Carrier;
 use SWCO\AppNexusAPI\Services\Category;
 use SWCO\AppNexusAPI\Services\DeviceMake;
+use SWCO\AppNexusAPI\Services\DeviceModel;
 
 class ServicesTest extends \PHPUnit_Framework_TestCase
 {
@@ -122,6 +123,32 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
             $this->assertInternalType('int', $obj->getId());
             $this->assertInternalType('string', $obj->getName());
             $this->assertInternalType('array', $obj->getCodes());
+        }
+    }
+
+    public function testDeviceModelServiceImport()
+    {
+        foreach ($this->getData('device-model', 'device-models') as $data) {
+            $obj = new DeviceModel();
+            $obj->import($data);
+
+            $this->assertEquals($data['id'], $obj->getId());
+            $this->assertEquals($data['name'], $obj->getName());
+            $this->assertCount(
+                count($this->getArray(isset($data['codes']) ? $data['codes'] : array())), $obj->getCodes()
+            );
+            $this->assertEquals($data['device_make_id'], $obj->getDeviceMakeId());
+            $this->assertEquals($data['device_type'], $obj->getDeviceType());
+            $this->assertEquals($data['screen_height'], $obj->getScreenHeight());
+            $this->assertEquals($data['screen_width'], $obj->getScreenWidth());
+
+            $this->assertInternalType('int', $obj->getId());
+            $this->assertInternalType('string', $obj->getName());
+            $this->assertInternalType('array', $obj->getCodes());
+            $this->assertInternalType('int', $obj->getDeviceMakeId());
+            $this->assertInternalType('string', $obj->getDeviceType());
+            $this->assertInternalType('int', $obj->getScreenHeight());
+            $this->assertInternalType('int', $obj->getScreenWidth());
         }
     }
 }
