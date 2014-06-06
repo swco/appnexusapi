@@ -1,6 +1,8 @@
 AppNexus Read-Only API
 ======================
 
+[![Latest Stable Version](https://poser.pugx.org/swco/appnexusapi/v/stable.svg)](https://packagist.org/packages/swco/appnexusapi) [![Build Status](https://travis-ci.org/swco/appnexusapi.svg?branch=master)](https://travis-ci.org/swco/appnexusapi) [![License](https://poser.pugx.org/swco/appnexusapi/license.svg)](https://packagist.org/packages/swco/appnexusapi)
+
 ```php
 use \SWCO\AppNexusAPI\Request;
 
