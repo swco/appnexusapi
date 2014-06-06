@@ -1,6 +1,13 @@
 {
     "name": "swco/appnexusapi",
-    "description": "AppNexus Read-Only API",
+    "description": "Interface for accessing the AppNexus read-only API",
+    "authors": [
+        {
+            "name": "Gareth Evans",
+            "email": "garoevans@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "license": "MIT",
     "autoload": {
         "psr-4": {
