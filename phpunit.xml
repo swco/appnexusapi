@@ -18,9 +18,9 @@
     <filter>
         <whitelist>
             <directory>./src/</directory>
-            <exclude>
-                <directory>./src/Tests</directory>
-            </exclude>
         </whitelist>
+        <blacklist>
+            <directory>./src/Tests</directory>
+        </blacklist>
     </filter>
 </phpunit>
