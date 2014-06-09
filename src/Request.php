@@ -213,6 +213,10 @@ class Request
      */
     public function send(array $postData = array())
     {
+        if (!$this->token) {
+            $this->auth();
+        }
+
         try {
             $data = $this->buildRequestObject($postData)->send()->json();
         } catch (ClientErrorResponseException $e) {
@@ -226,7 +230,7 @@ class Request
         try {
             $this->validateResponseData($data);
         } catch (NoAuthException $e) {
-            return $this->auth($e, $postData);
+            return $this->reAuth($e, $postData);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -236,11 +240,9 @@ class Request
 
     /**
      * @param \Exception $e
-     * @param array      $postData
-     * @return AbstractCoreService[]
      * @throws Exceptions\NoAuthException
      */
-    private function auth(\Exception $e = null, array $postData = array())
+    private function auth(\Exception $e = null)
     {
         $request = $this->client->post(
             "auth",
@@ -253,10 +255,21 @@ class Request
         $data     = $response->json();
         if (isset($data['response']['token'])) {
             $this->token = $data['response']['token'];
-            return $this->send($postData);
         } else {
             throw new NoAuthException("Auth Failed", 0, $e);
         }
+    }
+
+    /**
+     * @param \Exception $e
+     * @param array      $postData
+     * @return AbstractCoreService[]
+     */
+    private function reAuth(\Exception $e = null, array $postData = array())
+    {
+        $this->auth($e);
+
+        return $this->send($postData);
     }
 
     /**
