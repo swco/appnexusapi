@@ -10,6 +10,7 @@ use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use SWCO\AppNexusAPI\Exceptions\AppNexusAPIException;
 use SWCO\AppNexusAPI\Exceptions\BadServiceException;
+use SWCO\AppNexusAPI\Exceptions\NoAuthException;
 use SWCO\AppNexusAPI\Services\Brand;
 use SWCO\AppNexusAPI\Services\Carrier;
 use SWCO\AppNexusAPI\Services\Category;
@@ -206,9 +207,9 @@ class Request
 
     /**
      * @param array $postData
-     * @return AbstractService
-     * @throws Exceptions\BadServiceException
+     * @return AbstractCoreService[]
      * @throws Exceptions\AppNexusAPIException
+     * @throws \Exception
      */
     public function send(array $postData = array())
     {
@@ -216,30 +217,61 @@ class Request
             $data = $this->buildRequestObject($postData)->send()->json();
         } catch (ClientErrorResponseException $e) {
             $data = $e->getResponse()->json();
+        } catch (AppNexusAPIException $e) {
+            throw $e;
         } catch (\Exception $e) {
             $data = array();
         }
 
+        try {
+            $this->validateResponseData($data);
+        } catch (NoAuthException $e) {
+            return $this->auth($e);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $this->getServiceObjectCollection($this->getService(), $data['response']);
+    }
+
+    /**
+     * @param \Exception $e
+     * @return AbstractCoreService[]
+     * @throws Exceptions\NoAuthException
+     */
+    private function auth(\Exception $e = null)
+    {
+        $request = $this->client->post(
+            "auth",
+            null,
+            json_encode(
+                array("auth" => array("username" => $this->username, "password" => $this->password))
+            )
+        );
+        $response = $request->send();
+        $data     = $response->json();
+        if (isset($data['response']['token'])) {
+            $this->token = $data['response']['token'];
+            return $this->send();
+        } else {
+            throw new NoAuthException("Auth Failed", 0, $e);
+        }
+    }
+
+    /**
+     * @param array $data
+     * @throws Exceptions\AppNexusAPIException
+     * @throws Exceptions\NoAuthException
+     */
+    private function validateResponseData(array &$data)
+    {
         if (!isset($data['response']['status']) || $data['response']['status'] !== "OK") {
             if (isset($data['response']['error'], $data['response']['error_id'])) {
-                // TODO: pull auth away from `send()`
                 if ($data['response']['error_id'] === 'NOAUTH'
                     && $data['response']['error'] === 'Authentication failed - not logged in') {
-                    $request = $this->client->post(
-                        "auth",
-                        null,
-                        json_encode(
-                            array("auth" => array("username" => $this->username, "password" => $this->password))
-                        )
+                    throw new NoAuthException(
+                        sprintf("%s: %s", $data['response']['error_id'], $data['response']['error'])
                     );
-                    $response = $request->send();
-                    $data     = $response->json();
-                    if (isset($data['response']['token'])) {
-                        $this->token = $data['response']['token'];
-                        return $this->send();
-                    } else {
-                        throw new AppNexusAPIException("Auth Failed");
-                    }
                 } else {
                     throw new AppNexusAPIException(
                         sprintf(
@@ -253,8 +285,6 @@ class Request
                 throw new AppNexusAPIException("Call failed with no status.");
             }
         }
-
-        return $this->getServiceObjectCollection($this->getService(), $data['response']);
     }
 
     /**
