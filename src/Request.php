@@ -212,7 +212,7 @@ class Request
 
     /**
      * @param array $postData
-     * @return AbstractCoreService[]
+     * @return Response
      * @throws Exceptions\AppNexusAPIException
      * @throws \Exception
      */
@@ -240,7 +240,14 @@ class Request
             throw $e;
         }
 
-        return $this->getServiceObjectCollection($this->getService(), $data['response']);
+        $responseData = $data['response'];
+
+        return new Response(
+            $this->getServiceObjectCollection($this->getService(), $responseData),
+            $responseData['status'],
+            $responseData['count'],
+            $responseData['start_element']
+        );
     }
 
     /**
@@ -504,11 +511,13 @@ class Request
      */
     private function returnOne($services)
     {
-        if (!is_array($services)) {
+        if (!$services instanceof Response) {
             throw new AppNexusAPIException("Service not found.");
         }
 
-        return reset($services);
+        $services->rewind();
+
+        return $services->current();
     }
 
     /**
