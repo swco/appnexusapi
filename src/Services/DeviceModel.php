@@ -5,10 +5,10 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 use SWCO\AppNexusAPI\Services\DeviceModel\Code;
 
-class DeviceModel extends AbstractGetService
+class DeviceModel extends AbstractCoreService
 {
     /**
      * The ID of the device model.

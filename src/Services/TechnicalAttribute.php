@@ -5,9 +5,9 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 
-class TechnicalAttribute extends AbstractGetService
+class TechnicalAttribute extends AbstractCoreService
 {
     /**
      * The internal identifier for the technical attribute

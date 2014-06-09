@@ -5,9 +5,9 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 
-class Language extends AbstractGetService
+class Language extends AbstractCoreService
 {
     /**
      * The ID of the language.

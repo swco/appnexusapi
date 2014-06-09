@@ -212,36 +212,8 @@ class Request
      */
     public function send(array $postData = array())
     {
-        $where = $this->where;
-
-        if (isset($where['since'])) {
-            if (!$this->getServiceObject($this->getService())->supportsSince()) {
-                throw new BadServiceException(sprintf("[%s] does not support `since()`", $this->getService()));
-            }
-
-            switch ($this->getService()) {
-                case self::SERVICE_LANGUAGE:
-                    $key = 'min_last_activity';
-                    break;
-                default:
-                    $key = 'min_last_modified';
-                    break;
-            }
-
-            $where[$key] = $where['since'];
-            unset($where['since']);
-        }
-
-        $uri = sprintf("/%s?%s", $this->getService(), http_build_query($where));
-        if ($this->getServiceObject($this->getService())->needsPost()) {
-            $request = $this->client->post($uri, array('Authorization' => $this->token), json_encode($postData));
-        } else {
-            $request = $this->client->get($uri, array('Authorization' => $this->token));
-        }
-
         try {
-            $response = $request->send();
-            $data     = $response->json();
+            $data = $this->buildRequestObject($postData)->send()->json();
         } catch (ClientErrorResponseException $e) {
             $data = $e->getResponse()->json();
         } catch (\Exception $e) {
@@ -286,6 +258,49 @@ class Request
     }
 
     /**
+     * @param array $postData
+     * @return \Guzzle\Http\Message\EntityEnclosingRequestInterface|\Guzzle\Http\Message\RequestInterface
+     * @throws Exceptions\BadServiceException
+     * @throws Exceptions\AppNexusAPIException
+     */
+    private function buildRequestObject(array $postData = array())
+    {
+        $where = $this->where;
+
+        if (isset($where['since'])) {
+            if (!$this->getServiceObject($this->getService())->supportsSince()) {
+                throw new BadServiceException(sprintf("[%s] does not support `since()`", $this->getService()));
+            }
+
+            switch ($this->getService()) {
+                case self::SERVICE_LANGUAGE:
+                    $key = 'min_last_activity';
+                    break;
+                default:
+                    $key = 'min_last_modified';
+                    break;
+            }
+
+            $where[$key] = $where['since'];
+            unset($where['since']);
+        }
+
+        $uri = sprintf("/%s?%s", $this->getService(), http_build_query($where));
+        switch ($this->getServiceObject($this->getService())->getRequestVerb()) {
+            case 'get':
+                return $this->client->get($uri, array('Authorization' => $this->token));
+                break;
+            case 'post':
+                return $this->client->post($uri, array('Authorization' => $this->token), json_encode($postData));
+                break;
+            default:
+                throw new AppNexusAPIException(
+                    sprintf("Unknown verb [%s]", $this->getServiceObject($this->getService())->getRequestVerb())
+                );
+        }
+    }
+
+    /**
      * @return string
      * @throws Exceptions\BadServiceException
      */
@@ -303,7 +318,7 @@ class Request
 
     /**
      * @param string $service
-     * @return AbstractGetService
+     * @return AbstractCoreService
      * @throws Exceptions\BadServiceException
      */
     private function getServiceObject($service)
@@ -357,7 +372,7 @@ class Request
     /**
      * @param string $service
      * @param array  $data
-     * @return AbstractGetService[]
+     * @return AbstractCoreService[]
      * @throws Exceptions\BadServiceException
      */
     private function getServiceObjectCollection($service, array $data)
@@ -429,7 +444,7 @@ class Request
 
     /**
      * @param $services
-     * @return AbstractGetService
+     * @return AbstractCoreService
      * @throws Exceptions\AppNexusAPIException
      */
     private function returnOne($services)

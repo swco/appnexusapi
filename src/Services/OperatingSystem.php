@@ -5,9 +5,9 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 
-class OperatingSystem extends AbstractGetService
+class OperatingSystem extends AbstractCoreService
 {
     /**
      * The ID of the operating system.

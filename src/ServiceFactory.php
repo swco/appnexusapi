@@ -191,7 +191,7 @@ class ServiceFactory implements IServiceFactory
     /**
      * @param string $instanceMethod
      * @param array  $collectionData
-     * @return AbstractGetService[]
+     * @return AbstractCoreService[]
      */
     private function newCollection($instanceMethod, array $collectionData)
     {

@@ -5,12 +5,12 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 use SWCO\AppNexusAPI\Services\PlatformMember\Bidder;
 use SWCO\AppNexusAPI\Services\PlatformMember\ContactInfo;
 use SWCO\AppNexusAPI\Services\PlatformMember\VisibilityRules;
 
-class PlatformMember extends AbstractGetService
+class PlatformMember extends AbstractCoreService
 {
     /**
      * The ID of the member.

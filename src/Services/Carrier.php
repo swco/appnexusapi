@@ -5,10 +5,10 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 use SWCO\AppNexusAPI\Services\Carrier\Code;
 
-class Carrier extends AbstractGetService
+class Carrier extends AbstractCoreService
 {
     /**
      * The ID of the mobile carrier.

@@ -5,12 +5,12 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 use SWCO\AppNexusAPI\Services\Category\Country;
 use SWCO\AppNexusAPI\Services\Category\CountryBrand;
 use SWCO\AppNexusAPI\Services\Category\RegionBrand;
 
-class Category extends AbstractGetService
+class Category extends AbstractCoreService
 {
     /**
      * The ID of the category.

@@ -39,7 +39,7 @@ class RequestTest extends ServicesDataProvider
 
     /**
      * @expectedException        \SWCO\AppNexusAPI\Exceptions\BadServiceException
-     * @expectedExceptionMessage A service must be set via `get($service)` before calling [send]
+     * @expectedExceptionMessage A service must be set via `get($service)` before calling [buildRequestObject]
      */
     public function testExceptionThrowWhenNoServiceSet()
     {

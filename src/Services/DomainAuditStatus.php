@@ -5,9 +5,9 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 
-class DomainAuditStatus extends AbstractGetService
+class DomainAuditStatus extends AbstractCoreService
 {
     /**
      * The AppNexus ID for the domain.
@@ -77,11 +77,11 @@ class DomainAuditStatus extends AbstractGetService
     }
 
     /**
-     * @return boolean
+     * @return string
      */
-    public function needsPost()
+    public function getRequestVerb()
     {
-        return true;
+        return 'post';
     }
 
     /**

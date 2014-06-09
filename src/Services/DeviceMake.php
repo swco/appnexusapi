@@ -5,10 +5,10 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 use SWCO\AppNexusAPI\Services\DeviceMake\Code;
 
-class DeviceMake extends AbstractGetService
+class DeviceMake extends AbstractCoreService
 {
     /**
      * The ID of the device make.

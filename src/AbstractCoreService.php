@@ -5,7 +5,7 @@
 
 namespace SWCO\AppNexusAPI;
 
-abstract class AbstractGetService extends AbstractService
+abstract class AbstractCoreService extends AbstractService
 {
     protected $id;
 
@@ -18,11 +18,11 @@ abstract class AbstractGetService extends AbstractService
     }
 
     /**
-     * @return boolean
+     * @return string
      */
-    public function needsPost()
+    public function getRequestVerb()
     {
-        return false;
+        return 'get';
     }
 
     /**

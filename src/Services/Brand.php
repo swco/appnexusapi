@@ -5,9 +5,9 @@
 
 namespace SWCO\AppNexusAPI\Services;
 
-use SWCO\AppNexusAPI\AbstractGetService;
+use SWCO\AppNexusAPI\AbstractCoreService;
 
-class Brand extends AbstractGetService
+class Brand extends AbstractCoreService
 {
     /**
      * The ID of the brand.
