@@ -77,6 +77,21 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testSupportsSince()
+    {
+        $doNotSupportSince = array(
+            new Carrier(),
+            new DeviceMake(),
+            new DeviceModel(),
+            new DomainAuditStatus(),
+            new Language(),
+        );
+
+        foreach ($doNotSupportSince as $obj) {
+            $this->assertFalse($obj->supportsSince());
+        }
+    }
+
     public function testCategoryServiceImport()
     {
         foreach ($this->getData('category', 'categories') as $data) {
@@ -313,6 +328,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /* No data available
     public function testCategoryBrandServiceImport()
     {
         foreach ($this->getData('category', 'categories') as $data) {
@@ -331,7 +347,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
-    }
+    }*/
 
     public function testCategoryCountryServiceImport()
     {
@@ -349,6 +365,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /* No data available
     public function testCategoryCountryBrandServiceImport()
     {
         foreach ($this->getData('category', 'categories') as $data) {
@@ -369,8 +386,9 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
-    }
+    }*/
 
+    /* No data available
     public function testCategoryRegionBrandServiceImport()
     {
         foreach ($this->getData('category', 'categories') as $data) {
@@ -391,7 +409,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
-    }
+    }*/
 
     public function testDeviceMakeCodeServiceImport()
     {
