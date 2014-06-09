@@ -93,6 +93,11 @@ class Request
      */
     private $client;
 
+    /**
+     * @var boolean
+     */
+    private $authFail = false;
+
     public function __construct(
         $username,
         $password,
@@ -244,18 +249,24 @@ class Request
      */
     private function auth(\Exception $e = null)
     {
-        $request = $this->client->post(
-            "auth",
-            null,
-            json_encode(
-                array("auth" => array("username" => $this->username, "password" => $this->password))
-            )
-        );
-        $response = $request->send();
-        $data     = $response->json();
-        if (isset($data['response']['token'])) {
-            $this->token = $data['response']['token'];
-        } else {
+        if (!$this->authFail) {
+            $request = $this->client->post(
+                "auth",
+                null,
+                json_encode(
+                    array("auth" => array("username" => $this->username, "password" => $this->password))
+                )
+            );
+            $response = $request->send();
+            $data     = $response->json();
+            if (isset($data['response']['token'])) {
+                $this->token = $data['response']['token'];
+            } else {
+                $this->authFail = true;
+            }
+        }
+
+        if ($this->authFail) {
             throw new NoAuthException("Auth Failed", 0, $e);
         }
     }
