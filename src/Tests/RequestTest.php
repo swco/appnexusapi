@@ -7,7 +7,7 @@ namespace SWCO\AppNexusAPI\Tests;
 
 use SWCO\AppNexusAPI\Request;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends ServicesDataProvider
 {
     private function getRequest()
     {
@@ -104,12 +104,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSingleServiceHelper()
     {
-        $categorySixJson = require __DIR__ . '/data/category6.php';
-
         $stubLocalDataResponse = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataResponse');
         $stubLocalDataResponse->expects($this->once())
             ->method('json')
-            ->will($this->returnValue(json_decode($categorySixJson, true)));
+            ->will($this->returnValue($this->getData('category6')));
 
         $stubLocalDataRequest = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataRequest');
         $stubLocalDataRequest->expects($this->once())
@@ -126,5 +124,111 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $response = $request->getCategory(6);
 
         $this->assertInstanceOf('\SWCO\AppNexusAPI\Services\Category', $response);
+    }
+
+    public function testFilter()
+    {
+        $request = $this->getRequest();
+        $this->assertEquals(array(), $request->getFilter());
+
+        $request->where('foo', 'bar');
+        $this->assertEquals(array('foo' => 'bar'), $request->getFilter());
+
+        $request->reset();
+        $this->assertEquals(array(), $request->getFilter());
+
+        $dateTime = new \DateTime();
+        $request->since($dateTime);
+        $this->assertEquals(array('since' => $dateTime->format('Y-m-d H:i:s')), $request->getFilter());
+        $request->reset();
+
+        $request->offsetBy(5);
+        $this->assertEquals(array('start_element' => 5), $request->getFilter());
+        $request->reset();
+
+        $request->limitBy(5);
+        $this->assertEquals(array('num_elements' => 5), $request->getFilter());
+        $request->reset();
+
+        $request->sortBy('id', 'desc');
+        $this->assertEquals(array('sort' => 'id.desc'), $request->getFilter());
+        $request->reset();
+
+        $request->where('foo', 'bar')->since($dateTime)->offsetBy(5)->limitBy(5)->sortBy('id', 'desc');
+        $this->assertEquals(
+            array(
+                'foo'           => 'bar',
+                'since'         => $dateTime->format('Y-m-d H:i:s'),
+                'start_element' => 5,
+                'num_elements'  => 5,
+                'sort'          => 'id.desc',
+            ),
+            $request->getFilter()
+        );
+    }
+
+    public function testSinceKey()
+    {
+        $stubLocalDataResponse = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataResponse');
+        $stubLocalDataResponse->expects($this->once())
+            ->method('json')
+            ->will($this->returnValue(json_decode(require __DIR__ . '/data/category.php', true)));
+
+        $stubLocalDataRequest = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataRequest');
+        $stubLocalDataRequest->expects($this->once())
+            ->method('send')
+            ->will($this->returnValue($stubLocalDataResponse));
+
+        $dateTime = \DateTime::createFromFormat("Y-m-d H:i:s", "2014-00-00 00:00:00");
+
+        $stubLocalDataClient = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataClient');
+        $stubLocalDataClient->expects($this->once())
+            ->method('get')
+            ->with(
+                $this->equalTo(
+                    sprintf('/category?min_last_modified=%s', urlencode($dateTime->format("Y-m-d H:i:s")))),
+                $this->anything()
+            )
+            ->will($this->returnValue($stubLocalDataRequest));
+
+        $request = new Request('username', 'password', 'token', null, $stubLocalDataClient);
+
+        $request->get(Request::SERVICE_CATEGORY)->since($dateTime)->send();
+    }
+
+    /**
+     * @dataProvider newInstanceDataProvider
+     */
+    public function testNewCollections($class, $file, $key, $method)
+    {
+        $fullClass = sprintf('\SWCO\AppNexusAPI\Services\%s', $class);
+
+        $stubLocalDataResponse = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataResponse');
+        $stubLocalDataResponse->expects($this->once())
+            ->method('json')
+            ->will($this->returnValue($this->getData($file)));
+
+        $stubLocalDataRequest = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataRequest');
+        $stubLocalDataRequest->expects($this->once())
+            ->method('send')
+            ->will($this->returnValue($stubLocalDataResponse));
+
+        $stubLocalDataClient = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataClient');
+
+        $stubLocalDataClient->expects($this->once())
+            ->method($class === 'DomainAuditStatus' ? 'post' : 'get')
+            ->will($this->returnValue($stubLocalDataRequest));
+
+        $request = new Request('username', 'password', 'token', null, $stubLocalDataClient);
+
+        if ($class === 'DomainAuditStatus') {
+            $services = call_user_func(array($request, $method), array());
+        } else {
+            $services = call_user_func(array($request, $method));
+        }
+
+        foreach($services as $service) {
+            $this->assertInstanceOf($fullClass, $service);
+        }
     }
 }

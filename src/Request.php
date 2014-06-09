@@ -191,6 +191,14 @@ class Request
         return $this->where("sort", sprintf("%s.%s", $key, $direction));
     }
 
+    /**
+     * @return array
+     */
+    public function getFilter()
+    {
+        return $this->where;
+    }
+
     public function reset()
     {
         $this->where = array();

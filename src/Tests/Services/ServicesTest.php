@@ -15,17 +15,10 @@ use SWCO\AppNexusAPI\Services\Language;
 use SWCO\AppNexusAPI\Services\OperatingSystem;
 use SWCO\AppNexusAPI\Services\PlatformMember;
 use SWCO\AppNexusAPI\Services\TechnicalAttribute;
+use SWCO\AppNexusAPI\Tests\ServicesDataProvider;
 
-class ServicesTest extends \PHPUnit_Framework_TestCase
+class ServicesTest extends ServicesDataProvider
 {
-    private function getData($fileName, $sectionKey = null)
-    {
-        $json    = require dirname(__DIR__) . sprintf("/data/%s.php", $fileName);
-        $dataArr = json_decode($json, true);
-
-        return $sectionKey ? $dataArr['response'][$sectionKey] : $dataArr;
-    }
-
     private function getArray($data)
     {
         return is_array($data) ? $data : array();
