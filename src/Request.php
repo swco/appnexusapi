@@ -6,6 +6,7 @@
 namespace SWCO\AppNexusAPI;
 
 use Guzzle\Http\Client;
+use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use SWCO\AppNexusAPI\Exceptions\AppNexusAPIException;
 use SWCO\AppNexusAPI\Exceptions\BadServiceException;
@@ -86,12 +87,24 @@ class Request
      */
     private $serviceFactory;
 
-    public function __construct($username, $password, $token = null, IServiceFactory $serviceFactory = null)
+    /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    public function __construct(
+        $username,
+        $password,
+        $token = null,
+        IServiceFactory $serviceFactory = null,
+        ClientInterface $client = null
+    )
     {
         $this->username       = $username;
         $this->password       = $password;
         $this->token          = $token;
         $this->serviceFactory = $serviceFactory ? : new ServiceFactory();
+        $this->client         = $client ? : new Client(self::APP_NEXUS_API_URL);
     }
 
     /**
@@ -211,12 +224,11 @@ class Request
             unset($where['since']);
         }
 
-        $uri    = sprintf("/%s?%s", $this->getService(), http_build_query($where));
-        $client = new Client(self::APP_NEXUS_API_URL);
+        $uri = sprintf("/%s?%s", $this->getService(), http_build_query($where));
         if ($this->getServiceObject($this->getService())->needsPost()) {
-            $request = $client->post($uri, array('Authorization' => $this->token), json_encode($postData));
+            $request = $this->client->post($uri, array('Authorization' => $this->token), json_encode($postData));
         } else {
-            $request = $client->get($uri, array('Authorization' => $this->token));
+            $request = $this->client->get($uri, array('Authorization' => $this->token));
         }
 
         try {
@@ -230,9 +242,10 @@ class Request
 
         if (!isset($data['response']['status']) || $data['response']['status'] !== "OK") {
             if (isset($data['response']['error'], $data['response']['error_id'])) {
+                // TODO: pull auth away from `send()`
                 if ($data['response']['error_id'] === 'NOAUTH'
                     && $data['response']['error'] === 'Authentication failed - not logged in') {
-                    $request = $client->post(
+                    $request = $this->client->post(
                         "auth",
                         null,
                         json_encode(
