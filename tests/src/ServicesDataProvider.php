@@ -5,11 +5,11 @@
 
 namespace SWCO\AppNexusAPI\Tests;
 
-class ServicesDataProvider extends \PHPUnit_Framework_TestCase
+abstract class ServicesDataProvider extends \PHPUnit_Framework_TestCase
 {
     protected function getData($fileName, $sectionKey = null)
     {
-        $json    = require __DIR__ . sprintf("/data/%s.php", $fileName);
+        $json    = require dirname(__DIR__) . sprintf("/data/%s.php", $fileName);
         $dataArr = json_decode($json, true);
 
         return $sectionKey ? $dataArr['response'][$sectionKey] : $dataArr;

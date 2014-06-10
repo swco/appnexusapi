@@ -16,7 +16,7 @@ class RequestTest extends ServicesDataProvider
 
     private function getBadResponseData()
     {
-        return require __DIR__ . '/data/error-responses.php';
+        return require dirname(__DIR__) . '/data/error-responses.php';
     }
 
     /**
@@ -186,7 +186,7 @@ class RequestTest extends ServicesDataProvider
         $stubLocalDataResponse = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataResponse');
         $stubLocalDataResponse->expects($this->once())
             ->method('json')
-            ->will($this->returnValue(json_decode(require __DIR__ . '/data/category.php', true)));
+            ->will($this->returnValue(json_decode(require dirname(__DIR__) . '/data/category.php', true)));
 
         $stubLocalDataRequest = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataRequest');
         $stubLocalDataRequest->expects($this->once())
