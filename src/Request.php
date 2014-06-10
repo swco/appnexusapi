@@ -156,6 +156,9 @@ class Request
     }
 
     /**
+     * This method should no longer be called with an array of integers. This functionality will be removed in the next
+     * major release. Please use `whereIds()` as a replacement.
+     *
      * @param int|int[] $id
      * @return $this
      */
@@ -164,6 +167,15 @@ class Request
         $ids = is_array($id) ? implode(',', $id) : $id;
 
         return $this->where("id", $ids);
+    }
+
+    /**
+     * @param int[] $ids
+     * @return $this
+     */
+    public function whereIds(array $ids)
+    {
+        return $this->where("id", implode(',', $ids));
     }
 
     /**

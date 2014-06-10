@@ -150,11 +150,24 @@ class RequestTest extends ServicesDataProvider
         $this->assertEquals(array('num_elements' => 5), $request->getFilter());
         $request->reset();
 
+        $request->whereId(5);
+        $this->assertEquals(array('id' => 5), $request->getFilter());
+        $request->reset();
+
+        // temp support
+        $request->whereId(array(3,5,7));
+        $this->assertEquals(array('id' => '3,5,7'), $request->getFilter());
+        $request->reset();
+
+        $request->whereIds(array(3,5,7));
+        $this->assertEquals(array('id' => '3,5,7'), $request->getFilter());
+        $request->reset();
+
         $request->sortBy('id', 'desc');
         $this->assertEquals(array('sort' => 'id.desc'), $request->getFilter());
         $request->reset();
 
-        $request->where('foo', 'bar')->since($dateTime)->offsetBy(5)->limitBy(5)->sortBy('id', 'desc');
+        $request->where('foo', 'bar')->since($dateTime)->offsetBy(5)->limitBy(5)->sortBy('id', 'desc')->whereId(5);
         $this->assertEquals(
             array(
                 'foo'           => 'bar',
@@ -162,6 +175,7 @@ class RequestTest extends ServicesDataProvider
                 'start_element' => 5,
                 'num_elements'  => 5,
                 'sort'          => 'id.desc',
+                'id'            => 5,
             ),
             $request->getFilter()
         );
