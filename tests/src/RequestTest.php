@@ -9,11 +9,6 @@ use SWCO\AppNexusAPI\Request;
 
 class RequestTest extends ServicesDataProvider
 {
-    private function getRequest()
-    {
-        return new Request('username', 'password', 'token', null, new LocalDataClient());
-    }
-
     private function getBadResponseData()
     {
         return require dirname(__DIR__) . '/data/error-responses.php';

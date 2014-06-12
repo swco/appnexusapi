@@ -53,3 +53,24 @@ The only exception to this rule is params that should be an object, if unset the
 ```
 object = null;
 ```
+
+Advanced
+--------
+
+Some services (currently Brand) have their own special filter, this is accompanied with a Request wrapper;
+
+```php
+use \SWCO\AppNexusAPI\Request;
+use \SWCO\AppNexusAPI\BrandRequest;
+
+$request = new Request("username", "password");
+
+$brand = BrandRequest::newFromRequest($request);
+
+$brand->simple();
+
+...
+```
+
+This allows for extra functionality such as access to the `simple()` method above that removes the `num_creatives` data
+making the API call a lot faster.

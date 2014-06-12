@@ -5,6 +5,8 @@
 
 namespace SWCO\AppNexusAPI\Tests;
 
+use SWCO\AppNexusAPI\Request;
+
 abstract class ServicesDataProvider extends \PHPUnit_Framework_TestCase
 {
     protected function getData($fileName, $sectionKey = null)
@@ -13,6 +15,11 @@ abstract class ServicesDataProvider extends \PHPUnit_Framework_TestCase
         $dataArr = json_decode($json, true);
 
         return $sectionKey ? $dataArr['response'][$sectionKey] : $dataArr;
+    }
+
+    protected function getRequest()
+    {
+        return new Request('username', 'password', 'token', null, new LocalDataClient());
     }
 
     public function newInstanceDataProvider()

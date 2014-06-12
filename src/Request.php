@@ -98,6 +98,13 @@ class Request
      */
     private $authFail = false;
 
+    /**
+     * @param string          $username
+     * @param string          $password
+     * @param null|string     $token
+     * @param IServiceFactory $serviceFactory
+     * @param ClientInterface $client
+     */
     public function __construct(
         $username,
         $password,
@@ -111,6 +118,35 @@ class Request
         $this->token          = $token;
         $this->serviceFactory = $serviceFactory ? : new ServiceFactory();
         $this->client         = $client ? : new Client(self::APP_NEXUS_API_URL);
+    }
+
+    /**
+     * Helper method when building different request objects.
+     *
+     * @return array
+     */
+    public function getConstructParamsArray()
+    {
+        return array(
+            $this->username,
+            $this->password,
+            $this->token,
+            $this->serviceFactory,
+            $this->client,
+        );
+    }
+
+    /**
+     * Enables creating a new request object (or child class) from an existing request object.
+     * 
+     * @param Request $request
+     * @return static
+     */
+    public static function newFromRequest(Request $request)
+    {
+        $reflector = new \ReflectionClass(get_called_class());
+
+        return $reflector->newInstanceArgs($request->getConstructParamsArray());
     }
 
     /**
