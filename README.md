@@ -74,3 +74,38 @@ $brand->simple();
 
 This allows for extra functionality such as access to the `simple()` method above that removes the `num_creatives` data
 making the API call a lot faster.
+
+Auth
+----
+
+For heavier usage it is worth storing the token for re-use. The token doesn't change and the library handles re-authing when needed.
+
+Auth can be handled via the request object or using the `Auth` object directly;
+
+```php
+use \SWCO\AppNexusAPI\Request;
+
+$request = new Request("username", "password");
+$token = $request->auth();
+
+// Store $token somewhere
+```
+
+```php
+use \SWCO\AppNexusAPI\Auth;
+use \Guzzle\Http\Client;
+use \SWCO\AppNexusAPI\Request;
+use \SWCO\AppNexusAPI\Exceptions\NoAuthException;
+
+$auth = new Auth();
+$auth->setClient(new Client(Request::APP_NEXUS_API_URL));
+try {
+    $token = $auth->auth('username', 'password');
+} catch (NoAuthException $e) {
+    $token = null;
+}
+
+if ($token) {
+    // Store $token somewhere
+}
+```

@@ -240,4 +240,25 @@ class RequestTest extends ServicesDataProvider
             $this->assertInstanceOf($fullClass, $service);
         }
     }
+
+    public function testAuth()
+    {
+        $stubLocalDataResponse = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataResponse');
+        $stubLocalDataResponse->expects($this->once())
+            ->method('json')
+            ->will($this->returnValue(array('response' => array('token' => 'the-token'))));
+
+        $stubLocalDataRequest = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataRequest');
+        $stubLocalDataRequest->expects($this->once())
+            ->method('send')
+            ->will($this->returnValue($stubLocalDataResponse));
+
+        $stubLocalDataClient = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataClient');
+        $stubLocalDataClient->expects($this->once())
+            ->method('post')
+            ->will($this->returnValue($stubLocalDataRequest));
+
+        $request = new Request('username', 'password', null, null, $stubLocalDataClient);
+        $this->assertEquals('the-token', $request->auth());
+    }
 }

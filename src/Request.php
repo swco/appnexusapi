@@ -94,9 +94,9 @@ class Request
     private $client;
 
     /**
-     * @var boolean
+     * @var Auth
      */
-    private $authFail = false;
+    private $auth;
 
     /**
      * @param string          $username
@@ -104,13 +104,15 @@ class Request
      * @param null|string     $token
      * @param IServiceFactory $serviceFactory
      * @param ClientInterface $client
+     * @param Auth            $auth
      */
     public function __construct(
         $username,
         $password,
         $token = null,
         IServiceFactory $serviceFactory = null,
-        ClientInterface $client = null
+        ClientInterface $client = null,
+        Auth $auth = null
     )
     {
         $this->username       = $username;
@@ -118,6 +120,9 @@ class Request
         $this->token          = $token;
         $this->serviceFactory = $serviceFactory ? : new ServiceFactory();
         $this->client         = $client ? : new Client(self::APP_NEXUS_API_URL);
+        $this->auth           = $auth ? : new Auth();
+
+        $this->auth->setClient($this->client);
     }
 
     /**
@@ -133,12 +138,13 @@ class Request
             $this->token,
             $this->serviceFactory,
             $this->client,
+            $this->auth,
         );
     }
 
     /**
      * Enables creating a new request object (or child class) from an existing request object.
-     * 
+     *
      * @param Request $request
      * @return static
      */
@@ -267,7 +273,7 @@ class Request
     public function send(array $postData = array())
     {
         if (!$this->token) {
-            $this->auth();
+            $this->token = $this->auth->auth($this->username, $this->password);
         }
 
         try {
@@ -299,43 +305,35 @@ class Request
     }
 
     /**
-     * @param \Exception $e
-     * @throws Exceptions\NoAuthException
-     */
-    private function auth(\Exception $e = null)
-    {
-        if (!$this->authFail) {
-            $request = $this->client->post(
-                "auth",
-                null,
-                json_encode(
-                    array("auth" => array("username" => $this->username, "password" => $this->password))
-                )
-            );
-            $response = $request->send();
-            $data     = $response->json();
-            if (isset($data['response']['token'])) {
-                $this->token = $data['response']['token'];
-            } else {
-                $this->authFail = true;
-            }
-        }
-
-        if ($this->authFail) {
-            throw new NoAuthException("Auth Failed", 0, $e);
-        }
-    }
-
-    /**
-     * @param \Exception $e
+     * @param \Exception $lastException
      * @param array      $postData
      * @return AbstractCoreService[]
      */
-    private function reAuth(\Exception $e = null, array $postData = array())
+    private function reAuth(\Exception $lastException = null, array $postData = array())
     {
-        $this->auth($e);
+        $this->token = $this->auth->auth($this->username, $this->password, $lastException);
 
         return $this->send($postData);
+    }
+
+    /**
+     * @param null|string $username
+     * @param null|string $password
+     * @param boolean     $storeToken
+     * @return string
+     */
+    public function auth($username = null, $password = null, $storeToken = true)
+    {
+        $username = $username ? : $this->username;
+        $password = $password ? : $this->password;
+
+        $token = $this->auth->auth($username, $password);
+
+        if ($storeToken) {
+            $this->token = $token;
+        }
+
+        return $token;
     }
 
     /**
