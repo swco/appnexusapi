@@ -144,7 +144,7 @@ $data = $dataPool->getAll($request); // Gets all Device Make items
 
 $data = $dataPool->get($request, 250); // Gets the first 250 results of the Device Make items.
 
-$request->offset(250);
+$request->offsetBy(250);
 
 $data = $dataPool->get($request, 250); // Gets items 250 - 500.
 ```
