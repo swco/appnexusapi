@@ -5,11 +5,36 @@
 
 namespace SWCO\AppNexusAPI\Tests;
 
+use Guzzle\Http\ClientInterface;
 use SWCO\AppNexusAPI\BrandRequest;
 use SWCO\AppNexusAPI\Request;
 
 class BrandRequestTest extends ServicesDataProvider
 {
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ClientInterface
+     */
+    private function getMockLocalDataClient()
+    {
+        $stubLocalDataResponse = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataResponse');
+        $stubLocalDataResponse->expects($this->once())
+            ->method('json')
+            ->will($this->returnValue($this->getData('brand-simple')));
+
+        $stubLocalDataRequest = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataRequest');
+        $stubLocalDataRequest->expects($this->once())
+            ->method('send')
+            ->will($this->returnValue($stubLocalDataResponse));
+
+        $stubLocalDataClient = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataClient');
+
+        $stubLocalDataClient->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($stubLocalDataRequest));
+
+        return $stubLocalDataClient;
+    }
+
     public function testSimpleFilter()
     {
         $brandRequest = BrandRequest::newFromRequest($this->getRequest());
@@ -40,24 +65,8 @@ class BrandRequestTest extends ServicesDataProvider
 
     public function testNewCollections()
     {
-        $stubLocalDataResponse = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataResponse');
-        $stubLocalDataResponse->expects($this->once())
-            ->method('json')
-            ->will($this->returnValue($this->getData('brand-simple')));
-
-        $stubLocalDataRequest = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataRequest');
-        $stubLocalDataRequest->expects($this->once())
-            ->method('send')
-            ->will($this->returnValue($stubLocalDataResponse));
-
-        $stubLocalDataClient = $this->getMock('\SWCO\AppNexusAPI\Tests\LocalDataClient');
-
-        $stubLocalDataClient->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($stubLocalDataRequest));
-
         $request = BrandRequest::newFromRequest(
-            new Request('username', 'password', 'token', null, $stubLocalDataClient)
+            new Request('username', 'password', 'token', null, $this->getMockLocalDataClient())
         );
 
         $services = $request->getBrands();
@@ -66,5 +75,36 @@ class BrandRequestTest extends ServicesDataProvider
             $this->assertInstanceOf('\SWCO\AppNexusAPI\Services\Brand', $service);
             $this->assertEquals(0, $service->getNumCreatives());
         }
+    }
+
+    public function testSimpleBrandRequests()
+    {
+        $request = BrandRequest::newFromRequest(
+            new Request('username', 'password', 'token', null, $this->getMockLocalDataClient())
+        );
+        $request->getBrand(1, true);
+        $filter = $request->getFilter();
+        $this->assertTrue(isset($filter['simple']));
+
+        $request = BrandRequest::newFromRequest(
+            new Request('username', 'password', 'token', null, $this->getMockLocalDataClient())
+        );
+        $request->getBrand(1);
+        $filter = $request->getFilter();
+        $this->assertFalse(isset($filter['simple']));
+
+        $request = BrandRequest::newFromRequest(
+            new Request('username', 'password', 'token', null, $this->getMockLocalDataClient())
+        );
+        $request->getBrands(true);
+        $filter = $request->getFilter();
+        $this->assertTrue(isset($filter['simple']));
+
+        $request = BrandRequest::newFromRequest(
+            new Request('username', 'password', 'token', null, $this->getMockLocalDataClient())
+        );
+        $request->getBrands();
+        $filter = $request->getFilter();
+        $this->assertFalse(isset($filter['simple']));
     }
 }

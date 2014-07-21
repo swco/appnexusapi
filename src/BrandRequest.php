@@ -6,6 +6,7 @@
 namespace SWCO\AppNexusAPI;
 
 use Guzzle\Http\ClientInterface;
+use SWCO\AppNexusAPI\Services\Brand;
 
 class BrandRequest extends Request
 {
@@ -32,5 +33,36 @@ class BrandRequest extends Request
         $this->where('simple', 'true');
 
         return $this;
+    }
+
+    /**
+     * @param int  $id
+     * @param bool $simple
+     * @return Brand
+     */
+    public function getBrand($id, $simple = false)
+    {
+        $this->get(self::SERVICE_BRAND)->whereId($id);
+
+        if ($simple) {
+            $this->simple();
+        }
+
+        return $this->returnOne($this->send());
+    }
+
+    /**
+     * @param bool $simple
+     * @return Brand[]
+     */
+    public function getBrands($simple = false)
+    {
+        $this->get(self::SERVICE_BRAND, false);
+
+        if ($simple) {
+            $this->simple();
+        }
+
+        return $this->send();
     }
 }

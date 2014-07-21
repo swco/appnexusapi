@@ -75,6 +75,20 @@ $brand->simple();
 This allows for extra functionality such as access to the `simple()` method above that removes the `num_creatives` data
 making the API call a lot faster.
 
+You can also send the simple flags through the helper functions `getBrand()` and `getBrands()`;
+
+```php
+use \SWCO\AppNexusAPI\Request;
+use \SWCO\AppNexusAPI\BrandRequest;
+
+$request = new Request("username", "password");
+
+$brand = BrandRequest::newFromRequest($request);
+
+$simple = true;
+$brand->getBrand(1, $simple);
+```
+
 Auth
 ----
 

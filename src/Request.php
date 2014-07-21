@@ -555,7 +555,7 @@ class Request
      * @return AbstractCoreService
      * @throws Exceptions\AppNexusAPIException
      */
-    private function returnOne($services)
+    protected function returnOne($services)
     {
         if (!$services instanceof Response) {
             throw new AppNexusAPIException("Service not found.");
