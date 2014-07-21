@@ -92,7 +92,9 @@ $brand->getBrand(1, $simple);
 Auth
 ----
 
-For heavier usage it is worth storing the token for re-use. The token doesn't change and the library handles re-authing when needed.
+For heavier usage it is worth storing the token for re-use*. The token doesn't change and the library handles re-authing when needed.
+
+*The token does change occasionally. If an old token is stored in the config the request will re-auth getting a correct token. There is currently no way of reporting this.
 
 Auth can be handled via the request object or using the `Auth` object directly;
 
@@ -122,4 +124,27 @@ try {
 if ($token) {
     // Store $token somewhere
 }
+```
+
+DataPool
+--------
+
+Generally the API is limited to 100 results per request. There is a `DataPool` object available to get all or a specific number of results by making multiple requests;
+
+```php
+use SWCO\AppNexusAPI\DataPool;
+use SWCO\AppNexusAPI\Request;
+
+$request = new Request('username', 'password');
+$request->get(Request::SERVICE_DEVICE_MAKE);
+
+$dataPool = new DataPool();
+
+$data = $dataPool->getAll($request); // Gets all Device Make items
+
+$data = $dataPool->get($request, 250); // Gets the first 250 results of the Device Make items.
+
+$request->offset(250);
+
+$data = $dataPool->get($request, 250); // Gets items 250 - 500.
 ```

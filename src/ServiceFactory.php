@@ -199,7 +199,7 @@ class ServiceFactory implements IServiceFactory
 
         foreach ($collectionData as $data) {
             $obj = $this->$instanceMethod()->import($data);
-            $collection[$obj->getId()] = $obj;
+            $collection[] = $obj;
         }
 
         return $collection;

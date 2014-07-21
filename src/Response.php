@@ -45,6 +45,17 @@ class Response extends \ArrayIterator
     }
 
     /**
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getCount()
