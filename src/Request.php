@@ -22,7 +22,7 @@ use SWCO\AppNexusAPI\Services\OperatingSystem;
 use SWCO\AppNexusAPI\Services\PlatformMember;
 use SWCO\AppNexusAPI\Services\TechnicalAttribute;
 
-class Request
+class Request implements RequestInterface
 {
     const SERVICE_BRAND               = "brand";
     const SERVICE_CARRIER             = "carrier";

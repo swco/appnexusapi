@@ -18,10 +18,11 @@ class BrandRequest extends Request
         $password,
         $token = null,
         IServiceFactory $serviceFactory = null,
-        ClientInterface $client = null
+        ClientInterface $client = null,
+        Auth $auth = null
     )
     {
-        parent::__construct($username, $password, $token, $serviceFactory, $client);
+        parent::__construct($username, $password, $token, $serviceFactory, $client, $auth);
         $this->get(Request::SERVICE_BRAND, false);
     }
 
