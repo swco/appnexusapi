@@ -8,6 +8,16 @@ namespace SWCO\AppNexusAPI;
 class DataPool
 {
     /**
+     * The number of requests to start throttling requests at
+     */
+    const THROTTLE_REQUESTS_AT = 80;
+
+    /**
+     * The interval in seconds to measure the throttled requests
+     */
+    const THROTTLE_REQUEST_INTERVAL_SECONDS = 60;
+
+    /**
      * @param Request $request
      * @return Response
      */
@@ -42,10 +52,28 @@ class DataPool
             $offset = isset($filter['start_element']) ? $filter['start_element'] : $offset;
         }
 
-        $limit  = 100;
+        $limit = 100;
+
+        return $this->getDataLoop($request, $limit, $offset, $num);
+    }
+
+    /**
+     * @param Request $request
+     * @param int     $limit
+     * @param int     $offset
+     * @param int     $num
+     *
+     * @return Response
+     * @throws Exceptions\AppNexusAPIException
+     * @throws \Exception
+     */
+    private function getDataLoop(Request $request, $limit, $offset, $num)
+    {
+        $requestTimes = array();
 
         do {
             $services = $request->limitBy($limit)->offsetBy($offset)->send();
+            $requestTimes[] = time();
 
             if (!isset($response)) {
                 $response = $this->newResponse($services);
@@ -64,9 +92,29 @@ class DataPool
             if ($num !== -1 && ($offset + $limit) > $num) {
                 $limit = $num - $offset;
             }
+
+            $this->throttleRequests($requestTimes, $request);
         } while ($services->getCount() > $offset);
 
         return $response;
+    }
+
+    /**
+     * @param array   $requestTimes
+     * @param Request $request
+     */
+    private function throttleRequests(array &$requestTimes, Request $request)
+    {
+        if (self::THROTTLE_REQUESTS_AT === count($requestTimes)) {
+            $timeTaken = end($requestTimes) - array_shift($requestTimes);
+            if (self::THROTTLE_REQUEST_INTERVAL_SECONDS > $timeTaken) {
+                $throttleTime = self::THROTTLE_REQUEST_INTERVAL_SECONDS - $timeTaken;
+
+                $request->log("Throttling for $throttleTime seconds");
+
+                sleep($throttleTime);
+            }
+        }
     }
 
     /**
