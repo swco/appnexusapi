@@ -110,6 +110,8 @@ class DataPool
             if (self::THROTTLE_REQUEST_INTERVAL_SECONDS > $timeTaken) {
                 $throttleTime = self::THROTTLE_REQUEST_INTERVAL_SECONDS - $timeTaken;
 
+                $request->log("Throttling for $throttleTime seconds");
+
                 sleep($throttleTime);
             }
         }

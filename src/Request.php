@@ -99,6 +99,16 @@ class Request implements RequestInterface
     private $auth;
 
     /**
+     * @var bool
+     */
+    private $verbose = false;
+
+    /**
+     * @var array
+     */
+    private $log = array();
+
+    /**
      * @param string          $username
      * @param string          $password
      * @param null|string     $token
@@ -143,6 +153,27 @@ class Request implements RequestInterface
     }
 
     /**
+     * Make the logging verbose
+     *
+     * @return $this
+     */
+    public function verbose()
+    {
+        $this->verbose = true;
+
+        return $this;
+    }
+
+    public function log($message)
+    {
+        $this->log[] = $message;
+
+        if ($this->verbose) {
+            echo sprintf("[%s] %s\n", date("Y-m-d H:i:s"), $message);
+        }
+    }
+
+    /**
      * Enables creating a new request object (or child class) from an existing request object.
      *
      * @param Request $request
@@ -163,11 +194,13 @@ class Request implements RequestInterface
      */
     public function get($service, $reset = true)
     {
+        $this->log("Called get()");
         if (!isset($this->allowedServices[$service])) {
             throw new BadServiceException(sprintf("Unrecognised service [%s]", $service));
         }
 
         if ($reset) {
+            $this->log("Resetting filter");
             $this->reset();
         }
 
@@ -262,6 +295,7 @@ class Request implements RequestInterface
     public function reset()
     {
         $this->where = array();
+        $this->verbose = false;
     }
 
     /**
@@ -273,10 +307,12 @@ class Request implements RequestInterface
     public function send(array $postData = array())
     {
         if (!$this->token) {
+            $this->log("No token");
             $this->token = $this->auth->auth($this->username, $this->password);
         }
 
         try {
+            $this->log("Sending request");
             $data = $this->buildRequestObject($postData)->send()->json();
         } catch (ClientErrorResponseException $e) {
             $data = $e->getResponse()->json();
@@ -311,6 +347,7 @@ class Request implements RequestInterface
      */
     private function reAuth(\Exception $lastException = null, array $postData = array())
     {
+        $this->log("Re-auth");
         $this->token = $this->auth->auth($this->username, $this->password, $lastException);
 
         return $this->send($postData);
@@ -324,6 +361,7 @@ class Request implements RequestInterface
      */
     public function auth($username = null, $password = null, $storeToken = true)
     {
+        $this->log("Auth");
         $username = $username ? : $this->username;
         $password = $password ? : $this->password;
 
@@ -343,6 +381,7 @@ class Request implements RequestInterface
      */
     private function validateResponseData(array &$data)
     {
+        $this->log("Validating response data");
         if (!isset($data['response']['status']) || $data['response']['status'] !== "OK") {
             if (isset($data['response']['error'], $data['response']['error_id'])) {
                 if ($data['response']['error_id'] === 'NOAUTH'
