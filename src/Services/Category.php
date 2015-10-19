@@ -112,14 +112,18 @@ class Category extends AbstractCoreService
             }
         }
 
-        foreach ($data['whitelist']['countries_and_brands'] as $countryBrand) {
-            $countryBrandObj = new CountryBrand();
-            $this->countriesBrands[] = $countryBrandObj->import($countryBrand);
+        if (isset($data['whitelist']['countries_and_brands'])) {
+            foreach ($data['whitelist']['countries_and_brands'] as $countryBrand) {
+                $countryBrandObj = new CountryBrand();
+                $this->countriesBrands[] = $countryBrandObj->import($countryBrand);
+            }
         }
 
-        foreach ($data['whitelist']['regions_and_brands'] as $regionBrand) {
-            $regionBrandObj = new RegionBrand();
-            $this->regionsBrands[] = $regionBrandObj->import($regionBrand);
+        if (isset($data['whitelist']['regions_and_brands'])) {
+            foreach ($data['whitelist']['regions_and_brands'] as $regionBrand) {
+                $regionBrandObj = new RegionBrand();
+                $this->regionsBrands[] = $regionBrandObj->import($regionBrand);
+            }
         }
 
         return $this;

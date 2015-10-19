@@ -89,18 +89,16 @@ class ServicesTest extends ServicesDataProvider
     {
         $this->assertEquals($data['id'], $obj->getId());
         $this->assertEquals($data['is_brand_eligible'], $obj->isBrandEligible());
-        $whiltelistCountries = isset($data['whitelist']['countries']) ? $data['whitelist']['countries'] : array();
-        $this->assertCount(count($this->getArray($whiltelistCountries)), $obj->getCountries());
-        $this->assertCount(
-            count($this->getArray($data['whitelist']['countries_and_brands'])),
-            $obj->getCountriesBrands()
-        );
+        $whilteListCountries = isset($data['whitelist']['countries']) ? $data['whitelist']['countries'] : array();
+        $whilteListCountriesAndBrands = isset($data['whitelist']['countries_and_brands']) ?
+            $data['whitelist']['countries_and_brands'] : array();
+        $whilteListRegionsAndBrands = isset($data['whitelist']['regions_and_brands']) ?
+            $data['whitelist']['regions_and_brands'] : array();
+        $this->assertCount(count($this->getArray($whilteListCountries)), $obj->getCountries());
+        $this->assertCount(count($this->getArray($whilteListCountriesAndBrands)), $obj->getCountriesBrands());
         $this->assertEquals(new \DateTime($data['last_modified']), $obj->getLastModified());
         $this->assertEquals($data['name'], $obj->getName());
-        $this->assertCount(
-            count($this->getArray($data['whitelist']['regions_and_brands'])),
-            $obj->getRegionsBrands()
-        );
+        $this->assertCount(count($this->getArray($whilteListRegionsAndBrands)), $obj->getRegionsBrands());
         $this->assertEquals($data['requires_whitelist'], $obj->requiresWhitelist());
         $this->assertEquals($data['requires_whitelist_on_external'], $obj->requiresWhitelistOnExternal());
         $this->assertEquals($data['requires_whitelist_on_managed'], $obj->requiresWhitelistOnManaged());
@@ -132,6 +130,24 @@ class ServicesTest extends ServicesDataProvider
     public function testCategoryServiceImportWithMissingWhitelistCounty()
     {
         $data = $this->getData('category-no-country-in-whitelist', 'category');
+        $obj = new Category();
+        $obj->import($data);
+
+        $this->assertCategoryContents($obj, $data);
+    }
+
+    public function testCategoryServiceImportWithMissingWhitelistRegionsAndBrands()
+    {
+        $data = $this->getData('category-no-regions-and-brands-in-whitelist', 'category');
+        $obj = new Category();
+        $obj->import($data);
+
+        $this->assertCategoryContents($obj, $data);
+    }
+
+    public function testCategoryServiceImportWithMissingWhitelistCountiesAndBrands()
+    {
+        $data = $this->getData('category-no-countries-and-brands-in-whitelist', 'category');
         $obj = new Category();
         $obj->import($data);
 
