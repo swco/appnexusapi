@@ -105,9 +105,11 @@ class Category extends AbstractCoreService
         $this->lastModified                = \DateTime::createFromFormat("Y-m-d H:i:s", $data['last_modified']);
         $this->brandEligible               = $data['is_brand_eligible'];
 
-        foreach ($data['whitelist']['countries'] as $country) {
-            $countryObj = new Country();
-            $this->countries[] = $countryObj->import($country);
+        if (isset($data['whitelist']['countries'])) {
+            foreach ($data['whitelist']['countries'] as $country) {
+                $countryObj = new Country();
+                $this->countries[] = $countryObj->import($country);
+            }
         }
 
         foreach ($data['whitelist']['countries_and_brands'] as $countryBrand) {
