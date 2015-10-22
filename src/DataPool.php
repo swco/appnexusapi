@@ -13,9 +13,30 @@ class DataPool
     const THROTTLE_REQUESTS_AT = 80;
 
     /**
+     * @var int Overrides the constant above if set
+     */
+    private $throttleRequestsAt;
+
+    /**
      * The interval in seconds to measure the throttled requests
      */
     const THROTTLE_REQUEST_INTERVAL_SECONDS = 60;
+
+    /**
+     * @param int $throttleRequestsAt
+     */
+    public function setThrottleRequestsAt($throttleRequestsAt)
+    {
+        $this->throttleRequestsAt = $throttleRequestsAt;
+    }
+
+    /**
+     * @return int
+     */
+    private function getThrottleRequestsAt()
+    {
+        return $this->throttleRequestsAt ? : self::THROTTLE_REQUESTS_AT;
+    }
 
     /**
      * @param Request $request
@@ -105,7 +126,7 @@ class DataPool
      */
     private function throttleRequests(array &$requestTimes, Request $request)
     {
-        if (self::THROTTLE_REQUESTS_AT === count($requestTimes)) {
+        if ($this->getThrottleRequestsAt() === count($requestTimes)) {
             $timeTaken = end($requestTimes) - array_shift($requestTimes);
             if (self::THROTTLE_REQUEST_INTERVAL_SECONDS > $timeTaken) {
                 $throttleTime = self::THROTTLE_REQUEST_INTERVAL_SECONDS - $timeTaken;

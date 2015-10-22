@@ -115,6 +115,7 @@ class Request implements RequestInterface
      * @param IServiceFactory $serviceFactory
      * @param ClientInterface $client
      * @param Auth            $auth
+     * @param null|string     $appNexusApiUrl
      */
     public function __construct(
         $username,
@@ -122,14 +123,16 @@ class Request implements RequestInterface
         $token = null,
         IServiceFactory $serviceFactory = null,
         ClientInterface $client = null,
-        Auth $auth = null
+        Auth $auth = null,
+        $appNexusApiUrl = null
     )
     {
+        $appNexusApiUrl       = $appNexusApiUrl ? : self::APP_NEXUS_API_URL;
         $this->username       = $username;
         $this->password       = $password;
         $this->token          = $token;
         $this->serviceFactory = $serviceFactory ? : new ServiceFactory();
-        $this->client         = $client ? : new Client(self::APP_NEXUS_API_URL);
+        $this->client         = $client ? : new Client($appNexusApiUrl);
         $this->auth           = $auth ? : new Auth();
 
         $this->auth->setClient($this->client);

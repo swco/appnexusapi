@@ -5,6 +5,7 @@
 
 namespace SWCO\AppNexusAPI\Tests;
 
+use Guzzle\Http\Client;
 use SWCO\AppNexusAPI\Request;
 
 class RequestTest extends ServicesDataProvider
@@ -260,5 +261,26 @@ class RequestTest extends ServicesDataProvider
 
         $request = new Request('username', 'password', null, null, $stubLocalDataClient);
         $this->assertEquals('the-token', $request->auth());
+    }
+
+    public function testApiUrlCanBeOverridden()
+    {
+        $auth = $this->getMock('\SWCO\AppNexusAPI\Auth');
+        $auth->expects($this->once())
+            ->method('setClient')
+            ->with($this->callback(function($client){
+                return $client instanceof Client && $client->getBaseUrl(false) == 'http://api.appnexus.com';
+            }));
+
+        new Request('username', 'password', null, null, null, $auth);
+
+        $auth = $this->getMock('\SWCO\AppNexusAPI\Auth');
+        $auth->expects($this->once())
+            ->method('setClient')
+            ->with($this->callback(function($client){
+                return $client instanceof Client && $client->getBaseUrl(false) == 'what-i-sent';
+            }));
+
+        new Request('username', 'password', null, null, null, $auth, 'what-i-sent');
     }
 }
