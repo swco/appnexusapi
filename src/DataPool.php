@@ -23,6 +23,21 @@ class DataPool
     const THROTTLE_REQUEST_INTERVAL_SECONDS = 60;
 
     /**
+     * @var int
+     */
+    private $lastThrottleUpdateTime = 0;
+
+    /**
+     * @var float
+     */
+    private $computedRps;
+
+    /**
+     * @var float
+     */
+    private $requestVolume = 0;
+
+    /**
      * @param int $throttleRequestsAt
      */
     public function setThrottleRequestsAt($throttleRequestsAt)
@@ -90,11 +105,9 @@ class DataPool
      */
     private function getDataLoop(Request $request, $limit, $offset, $num)
     {
-        $requestTimes = array();
-
         do {
             $services = $request->limitBy($limit)->offsetBy($offset)->send();
-            $requestTimes[] = time();
+            $this->requestVolume++;
 
             if (!isset($response)) {
                 $response = $this->newResponse($services);
@@ -114,27 +127,44 @@ class DataPool
                 $limit = $num - $offset;
             }
 
-            $this->throttleRequests($requestTimes, $request);
+            $this->throttleRequests($request);
         } while ($services->getCount() > $offset);
 
         return $response;
     }
 
     /**
-     * @param array   $requestTimes
      * @param Request $request
      */
-    private function throttleRequests(array &$requestTimes, Request $request)
+    private function throttleRequests(Request $request)
     {
-        if ($this->getThrottleRequestsAt() === count($requestTimes)) {
-            $timeTaken = end($requestTimes) - array_shift($requestTimes);
-            if (self::THROTTLE_REQUEST_INTERVAL_SECONDS > $timeTaken) {
-                $throttleTime = self::THROTTLE_REQUEST_INTERVAL_SECONDS - $timeTaken;
+        if (!$this->computedRps) {
+            $this->computedRps = $this->getThrottleRequestsAt() / self::THROTTLE_REQUEST_INTERVAL_SECONDS;
+            $request->log("Throttle request interval {$this->computedRps}");
+        }
 
-                $request->log("Throttling for $throttleTime seconds");
+        if (!$this->lastThrottleUpdateTime) {
+            $this->lastThrottleUpdateTime = time();
+        }
 
-                sleep($throttleTime);
-            }
+        $this->updateRequestVolume();
+        $request->log("Request Volume {$this->requestVolume}");
+
+        if ((floor($this->requestVolume) - 1) >= $this->getThrottleRequestsAt()) {
+            $request->log("Throttling");
+            do {
+                usleep(100000);
+                $this->updateRequestVolume();
+            } while (floor($this->requestVolume) >= $this->getThrottleRequestsAt());
+        }
+    }
+
+    private function updateRequestVolume()
+    {
+        $diff = time() - $this->lastThrottleUpdateTime;
+        if ($diff > 0) {
+            $this->requestVolume -= ($diff * $this->computedRps);
+            $this->lastThrottleUpdateTime = time();
         }
     }
 
