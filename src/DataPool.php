@@ -150,13 +150,21 @@ class DataPool
         $this->updateRequestVolume();
         $request->log("Request Volume {$this->requestVolume}");
 
-        if ((floor($this->requestVolume) - 1) >= $this->getThrottleRequestsAt()) {
+        if ($this->shouldThrottle()) {
             $request->log("Throttling");
             do {
                 usleep(100000);
                 $this->updateRequestVolume();
-            } while (floor($this->requestVolume) >= $this->getThrottleRequestsAt());
+            } while ($this->shouldThrottle());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function shouldThrottle()
+    {
+        return floor($this->requestVolume) >= ($this->getThrottleRequestsAt() - 1);
     }
 
     private function updateRequestVolume()
